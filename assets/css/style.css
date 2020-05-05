@@ -1,0 +1,29 @@
+body {
+    font-family: candara;
+}
+
+.cus-font{
+    font-size: 14px;
+    color: black;
+}
+
+.fo-13{
+    font-size: 13px;
+}
+
+.fo-gray {
+    color: gray
+}
+
+label{
+    /* display: inline-block; */
+    text-transform: capitalize; 
+}
+
+.lower {
+    text-transform: lowercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
