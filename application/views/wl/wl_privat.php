@@ -37,6 +37,7 @@
                             <option value="nonaktif">Nonaktif</option>
                             <option value="wl">WL</option>
                             <option value="konfirm">Konfirm</option>
+                            <option value="pending">Pending</option>
                         </select>
                         </div>
                         <div class="form-group">
@@ -152,12 +153,9 @@
 <!-- modal wl kelas pv -->
 
 <div class="container-fluid">
-
-    <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800 mt-3"><?= $title?></h1>
     </div>
-
     <!-- berhasil memindahkan peserta -->
     <?php if( $this->session->flashdata('pesan') ) : ?>
         <div class="row">
@@ -166,19 +164,7 @@
                 </div>
         </div>
     <?php endif; ?>
-
-    <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'privat') echo 'active'?>" href="<?= base_url()?>wl/privat">Privat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'reguler') echo 'active'?>" href="<?= base_url()?>wl/reguler">Reguler</a>
-                </li>
-            </ul>
-        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
@@ -189,10 +175,14 @@
                         <th>Koor</th>
                         <th>No HP</th>
                         <th>Program</th>
-                        <th>Pengajar</th>
+                        <?php if($tabs != "pending"):?>
+                            <th>Pengajar</th>
+                        <?php endif;?>
                         <th>Peserta</th>
                         <th>Detail</th>
-                        <th>Konfirmasi</th>
+                        <?php if($tabs != "pending"):?>
+                            <th>Konfirmasi</th>
+                        <?php endif;?>
                     </thead>
                     <tbody>
                         <?php
@@ -205,19 +195,22 @@
                                 <td><?= $kelas['data']['nama_peserta']?></td>
                                 <td><?= $kelas['data']['no_hp']?>
                                 <td><?= $kelas['data']['program']?>
-                                <td><?= $kelas['data']['nama_kpq']?>
+                                <?php if($tabs != "pending"):?>
+                                    <td><?= $kelas['data']['nama_kpq']?>
+                                <?php endif;?>
                                 <td><center><?= $kelas['peserta']?></center></td>
                                 <td><center><a href="#modalKelasPrivat" class="badge badge-warning modalKelasPrivat" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>">detail</a></center></td>
-                                <?php if($kelas['data']['nama_kpq'] == ''):?>
-                                    <td><center>-</center></td>
-                                <?php else :?>
-                                    <td>
-                                        <center>
-                                            <a href="<?= base_url()?>wl/batal_wl/<?= $kelas['data']['id_kelas']?>" onclick="return confirm('Yakin tidak menyetujui kelas waiting list ini?')" class="btn btn-danger btn-sm" id="btn-delete"><i class="fa fa-times"></i></a>
-                                            <a href="<?= base_url()?>wl/konfirm_wl/<?= $kelas['data']['id_kelas']?>" onclick="return confirm('Yakin menyetujui kelas waiting list ini?')" class="btn btn-success btn-sm" id="btn-konfirm"><i class="fa fa-check" style="font-size: 12px"></i></a>
-                                        </center>
-                                    </td>
-                                    <!-- <td><center><a href="<?=base_url()?>wl/konfirmasi_kelas_wl/<?= $kelas['data']['id_kelas']?>" class="badge badge-info" onclick="return confirm('Anda yakin akan menyetujui kelas ini?')">konfirmasi</a></center></td> -->
+                                <?php if($tabs != "pending"):?>
+                                    <?php if($kelas['data']['nama_kpq'] == ''):?>
+                                        <td><center>-</center></td>
+                                    <?php else :?>
+                                        <td>
+                                            <center>
+                                                <a href="<?= base_url()?>wl/batal_wl/<?= $kelas['data']['id_kelas']?>" onclick="return confirm('Yakin tidak menyetujui kelas waiting list ini?')" class="btn btn-danger btn-sm" id="btn-delete"><i class="fa fa-times"></i></a>
+                                                <a href="<?= base_url()?>wl/konfirm_wl/<?= $kelas['data']['id_kelas']?>" onclick="return confirm('Yakin menyetujui kelas waiting list ini?')" class="btn btn-success btn-sm" id="btn-konfirm"><i class="fa fa-check" style="font-size: 12px"></i></a>
+                                            </center>
+                                        </td>
+                                    <?php endif;?>
                                 <?php endif;?>
                             </tr>
                         <?php endforeach;?>

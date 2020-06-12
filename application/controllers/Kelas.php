@@ -5,6 +5,9 @@ class Kelas extends CI_CONTROLLER{
         parent::__construct();
         $this->load->model('Akademik_model');
         $this->load->model('Akademik_model');
+        ini_set('xdebug.var_display_max_depth', '10');
+        ini_set('xdebug.var_display_max_children', '256');
+        ini_set('xdebug.var_display_max_data', '1024');
         if($this->session->userdata('status') != "login"){
             $this->session->set_flashdata('login', 'Maaf, Anda harus login terlebih dahulu');
 			redirect(base_url("login"));
@@ -19,7 +22,6 @@ class Kelas extends CI_CONTROLLER{
             $data['kelas'][$i]['data'] = $kelas;
             $data['kelas'][$i]['peserta'] = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($kelas['id_kelas']));
         }
-
         
         $kelas = $this->Akademik_model->get_kelas_reguler_aktif();
         foreach ($kelas as $i => $kelas) {
@@ -122,13 +124,13 @@ class Kelas extends CI_CONTROLLER{
     // edit data
         public function edit_kelas_reguler(){
             $this->Akademik_model->edit_kelas_reguler();
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengubah data kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil mengubah data kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             redirect($_SERVER['HTTP_REFERER']);
         }
         
         public function edit_kelas_privat(){
             $this->Akademik_model->edit_kelas_privat();
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengubah data kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil mengubah data kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
@@ -139,61 +141,70 @@ class Kelas extends CI_CONTROLLER{
             $id_kelas = $this->input->post("id", TRUE);
 
             $peserta = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($id_kelas));
-
-            if($peserta + sizeof($id) <= 10){
-                foreach ($id as $id) {
-                    $this->Akademik_model->pindah_kelas_reguler($id, $id_kelas);
+            if($id){
+                if($peserta + sizeof($id) <= 10){
+                    foreach ($id as $id) {
+                        $this->Akademik_model->pindah_kelas_reguler($id, $id_kelas);
+                    }
+    
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil memindahkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                } else {
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Kelas penuh, gagal memindahkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 }
-
-                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil memindahkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             } else {
-                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Kelas penuh, gagal memindahkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal memindahkan peserta, karena tidak ada peserta yang dipilih<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
             
             redirect($_SERVER['HTTP_REFERER']);
         }
 
         public function pindah_peserta_reguler_wl(){
-            $this->Akademik_model->pindah_peserta_reguler_wl();
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil memindahkan peserta ke waiting list<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');        
+            $id_peserta = $this->input->post("id_peserta", TRUE);
+            if($id_peserta){
+                $this->Akademik_model->pindah_peserta_reguler_wl();
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil memindahkan peserta ke waiting list<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');        
+            } else {
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal memindahkan peserta ke waiting list, karena tidak ada peserta yang dipilih<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            }
             redirect($_SERVER['HTTP_REFERER']);
         }
 
         public function nonaktif_peserta(){
             $id_peserta = $this->input->post("id_peserta", TRUE);
-
-            // var_dump($id_peserta);
-            foreach ($id_peserta as $id_peserta) {
-                $this->Akademik_model->nonaktif_peserta($id_peserta);
+            if($id_peserta){
+                foreach ($id_peserta as $id_peserta) {
+                    $this->Akademik_model->nonaktif_peserta($id_peserta);
+                }
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            } else {
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal menonaktifkan peserta, karena tidak ada peserta yang dipilih<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
-            
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil menonaktifkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            
             redirect($_SERVER['HTTP_REFERER']);
         }
         
         public function aktifkan_peserta(){
             $id_peserta = $this->input->post("id_peserta", TRUE);
-
-            // var_dump($id_peserta);
-            foreach ($id_peserta as $id_peserta) {
-                $this->Akademik_model->aktifkan_peserta($id_peserta);
+            if($id_peserta){
+                foreach ($id_peserta as $id_peserta) {
+                    $this->Akademik_model->aktifkan_peserta($id_peserta);
+                }
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil mengaktifkan kembali peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            } else {
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal mengaktifkan peserta, karena tidak ada peserta yang dipilih<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
-            
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengaktifkan kembali peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            
             redirect($_SERVER['HTTP_REFERER']);
         }
 
         public function nonaktif_jadwal(){
             $id_jadwal = $this->input->post("id_jadwal", TRUE);
-
-            foreach ($id_jadwal as $id_jadwal) {
-                $this->Akademik_model->nonaktif_jadwal($id_jadwal);
+            if($id_jadwal){
+                foreach ($id_jadwal as $id_jadwal) {
+                    $this->Akademik_model->nonaktif_jadwal($id_jadwal);
+                }
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            } else {
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal menonaktifkan jadwal, karena tidak ada jadwal yang dipilih<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
-            
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil menonaktifkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            
             redirect($_SERVER['HTTP_REFERER']);
         }
     // edit data
@@ -202,7 +213,7 @@ class Kelas extends CI_CONTROLLER{
         public function add_jadwal(){
             $this->Akademik_model->add_jadwal();
             
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil menambahkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menambahkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             
             redirect($_SERVER['HTTP_REFERER']);
         }
@@ -210,7 +221,7 @@ class Kelas extends CI_CONTROLLER{
         public function add_kelas_reguler(){
             $this->Akademik_model->add_kelas_reguler();
             
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil menambahkan kelas reguler<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menambahkan kelas reguler<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             
             redirect('kelas/reguler');
         }

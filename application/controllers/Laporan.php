@@ -23,7 +23,7 @@ class Laporan extends CI_CONTROLLER{
         
         $data['title'] = "Rekap KBM {$month[$data['bulan']]} {$data['tahun']}";
 
-        $kpq = $this->Akademik_model->get_all_kpq();
+        $kpq = $this->Akademik_model->get_all_kpq_aktif();
         foreach ($kpq as $i => $kpq) {
             $data['kbm'][$i]['kpq'] = $kpq['nama_kpq'];
             $data['kbm'][$i]['nip'] = $kpq['nip'];

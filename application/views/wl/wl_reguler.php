@@ -124,16 +124,6 @@
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4" style="max-width: 550px">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'privat') echo 'active'?>" href="<?= base_url()?>wl/privat">Privat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'reguler') echo 'active'?>" href="<?= base_url()?>wl/reguler">Reguler</a>
-                </li>
-            </ul>
-        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="dataTable" class="table table-sm cus-font">
