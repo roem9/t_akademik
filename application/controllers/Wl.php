@@ -4,6 +4,7 @@ class Wl extends CI_CONTROLLER{
         parent::__construct();
         $this->load->model("Akademik_model");
         $this->load->model("Main_model");
+        $this->load->model("Wl_model");
         
         if($this->session->userdata('status') != "login"){
             $this->session->set_flashdata('login', 'Maaf, Anda harus login terlebih dahulu');
@@ -21,6 +22,35 @@ class Wl extends CI_CONTROLLER{
             $data['wl'][$i]['kategori'] = $kategori['kategori'];
             $data['wl'][$i]['pria'] = COUNT($this->Akademik_model->get_peserta_wl_reguler_by_kategori($kategori['kategori'], 'Pria'));
             $data['wl'][$i]['wanita'] = COUNT($this->Akademik_model->get_peserta_wl_reguler_by_kategori($kategori['kategori'], 'Wanita'));
+        }
+        
+        $data['kelas_reg'] = [];
+        $kelas = $this->Akademik_model->get_kelas_reguler_aktif();
+        foreach ($kelas as $i => $kelas) {
+            $data['kelas_reg'][$i]['data'] = $kelas;
+            $data['kelas_reg'][$i]['peserta'] = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($kelas['id_kelas']));
+        }
+
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
+
+        $this->load->view("templates/header", $data);
+        $this->load->view("templates/sidebar", $data);
+        $this->load->view("wl/wl_reguler", $data);
+        $this->load->view("templates/footer", $data);
+    }
+
+    public function takhosus(){
+        $data['tabs'] = "reguler";
+        $data['title'] = "Waiting List Reguler Takhosus";
+
+        $data['wl'] = [];
+        $kategori = $this->Wl_model->get_kategori_wl_reguler_takhosus();
+        foreach ($kategori as $i => $kategori) {
+            $data['wl'][$i]['kategori'] = $kategori['kategori'];
+            $data['wl'][$i]['pria'] = COUNT($this->Wl_model->get_peserta_wl_reguler_takhosus_by_kategori($kategori['kategori'], 'Pria'));
+            $data['wl'][$i]['wanita'] = COUNT($this->Wl_model->get_peserta_wl_reguler_takhosus_by_kategori($kategori['kategori'], 'Wanita'));
         }
         
         $data['kelas_reg'] = [];
@@ -97,6 +127,14 @@ class Wl extends CI_CONTROLLER{
             $kategori = $data[0];
             $jk = $data[1];
             $data = $this->Akademik_model->get_peserta_wl_reguler_by_kategori($kategori, $jk);
+            echo json_encode($data);
+        }
+        
+        public function get_peserta_wl_reguler_takhosus_by_kategori(){
+            $data = explode('|', $this->input->post("id"));
+            $kategori = $data[0];
+            $jk = $data[1];
+            $data = $this->Wl_model->get_peserta_wl_reguler_takhosus_by_kategori($kategori, $jk);
             echo json_encode($data);
         }
     // add

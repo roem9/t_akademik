@@ -47,6 +47,10 @@
                                     <input class='form-control form-control-sm' type="text" name="no_hp" id="no_hp">
                                 </div>
                                 <div class="form-group">
+                                    <label for="tgl_lahir">Tgl Lahir</label></td>
+                                    <input class='form-control form-control-sm' type="date" name="tgl_lahir" id="tgl_lahir">
+                                </div>
+                                <div class="form-group">
                                     <label for="jk">Gender</label>
                                     <select name="jk" id="jk" class='form-control form-control-sm'>
                                         <option value="Pria">Pria</option>
@@ -179,6 +183,7 @@
                 $("#tgl_masuk").val(data.tgl_masuk);
                 $("#jk").val(data.jk);
                 $("#alamat_peserta").val(data.alamat);
+                $("#tgl_lahir").val(data.tgl_lahir);
             }
         })
     })

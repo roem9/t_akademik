@@ -195,7 +195,7 @@ class Akademik_model extends CI_MODEL{
         }
 
         public function get_peserta_wl_reguler_by_kategori($kategori, $jk){
-            $this->db->select("*, DATE_FORMAT(tgl_masuk, '%d-%m-%Y') as tgl");
+            $this->db->select("*, DATE_FORMAT(tgl_masuk, '%d-%m-%Y') as tgl, DATE_FORMAT(tgl_lahir, '%d-%m-%Y') as tgl_lahir");
             $this->db->from("peserta_reguler");
             $this->db->where("kategori", $kategori);
             $this->db->where("jk", $jk);
@@ -539,7 +539,7 @@ class Akademik_model extends CI_MODEL{
             
             // edit data kelas
             $data = [
-                "status" => $this->input->post("status", TRUE),
+                // "status" => $this->input->post("status", TRUE),
                 "nip" => $this->input->post("nip", TRUE),
                 "pengajar" => $this->input->post("pengajar", TRUE),
                 "program" => $this->input->post("program", TRUE),
@@ -623,9 +623,9 @@ class Akademik_model extends CI_MODEL{
                 "jam" => $this->input->post("jam", TRUE),
                 "nama_peserta" => $this->input->post("nama", TRUE),
                 "no_hp" => $this->input->post("no_hp", TRUE),
-                "jk" => $this->input->post("jk", TRUE)
+                "jk" => $this->input->post("jk", TRUE),
+                "tgl_lahir" => $this->input->post("tgl_lahir", TRUE)
             ];
-
             $this->db->where("id_peserta", $id);
             $this->db->update("peserta", $data);
 
@@ -641,7 +641,8 @@ class Akademik_model extends CI_MODEL{
                 "status" => $this->input->post("status", TRUE),
                 "nama_peserta" => $this->input->post("nama", TRUE),
                 "no_hp" => $this->input->post("no_hp", TRUE),
-                "jk" => $this->input->post("jk", TRUE)
+                "jk" => $this->input->post("jk", TRUE),
+                "tgl_lahir" => $this->input->post("tgl_lahir", TRUE)
             ];
 
             $this->db->where("id_peserta", $id);

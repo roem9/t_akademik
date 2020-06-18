@@ -90,6 +90,10 @@
                             <input class='form-control form-control-sm' type="text" name="no_hp" id="no_hp">
                         </div>
                         <div class="form-group">
+                            <label for="tgl_lahir">Tgl Lahir</label></td>
+                            <input class='form-control form-control-sm' type="date" name="tgl_lahir" id="tgl_lahir">
+                        </div>
+                        <div class="form-group">
                             <label for="jk">Gender</label>
                             <select name="jk" id="jk" class='form-control form-control-sm'>
                                 <option value="Pria">Pria</option>
@@ -174,7 +178,7 @@
                                 <td><?= $peserta['status']?> 
                                 <td><?= $peserta['nama_peserta']?></td>
                                 <td><?= $peserta['no_hp']?></td>
-                                <?php if($peserta['status'] == "wl" || $peserta['status'] == "nonaktif"):?>
+                                <?php if($peserta['status'] == "wl" || $peserta['status'] == "nonaktif" || $peserta['status'] == "takhosus"):?>
                                     <td><?= $peserta['program_peserta']?></td>
                                     <td><center>-</center></td>
                                     <td><?= $peserta['hari_peserta']?></td>
@@ -234,6 +238,7 @@
                 $("#hari").val(data.hari);
                 $("#jam").val(data.jam);
                 $("#alamat_peserta").val(data.alamat);
+                $("#tgl_lahir").val(data.tgl_lahir);
             }
         })
     })
