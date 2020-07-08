@@ -36,20 +36,9 @@
                             <label for="program">Program</label>
                             <select name="program" id="program" class="form-control form-control-sm">
                                 <option value="">Pilih Program</option>
-                                <option value="Pra Tahsin 1">Pra Tahsin 1</option>
-                                <option value="Pra Tahsin 2">Pra Tahsin 2</option>
-                                <option value="Pra Tahsin 3">Pra Tahsin 3</option>
-                                <option value="Tahsin 1">Tahsin 1</option>
-                                <option value="Tahsin 2">Tahsin 2</option>
-                                <option value="Tahsin 3">Tahsin 3</option>
-                                <option value="Tahsin 4">Tahsin 4</option>
-                                <option value="Tahsin Lanjutan">Tahsin Lanjutan</option>
-                                <option value="Tahfidz Anak">Tahfidz Anak</option>
-                                <option value="Tahfidz Dewasa">Tahfidz Dewasa</option>
-                                <option value="Bahasa Arab 1">Bahasa Arab 1</option>
-                                <option value="Bahasa Arab 2">Bahasa Arab 2</option>
-                                <option value="Bahasa Arab 3">Bahasa Arab 3</option>
-                                <option value="Bahasa Arab 4">Bahasa Arab 4</option>
+                                <?php foreach ($program as $prog) :?>
+                                    <option value="<?= $prog['nama_program']?>"><?= $prog['nama_program']?></option>
+                                <?php endforeach;?>
                             </select>
                         </div>
                         <div class="form-group">
@@ -207,7 +196,6 @@
     </div>
     <!-- End of Main Content -->
 </div>
-
 
 <script>
     $("#peserta").addClass("active");

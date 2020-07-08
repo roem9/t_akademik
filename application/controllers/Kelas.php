@@ -49,10 +49,15 @@ class Kelas extends CI_CONTROLLER{
         $this->load->view('templates/footer');
     }
 
-    public function pvkhusus(){
-        $data['title'] = 'Kelas Pv Khusus';
+    public function pvkhusus($status){
+        if($status == "nonaktif"){
+            $data['title'] = 'Kelas PV Khusus Nonaktif';
+            $kelas = $this->Main_model->get_all("kelas_pv_khusus", ["status" => "nonaktif"], "nama_peserta");
+        } else {
+            $data['title'] = 'Kelas PV Khusus Aktif';
+            $kelas = $this->Main_model->get_all("kelas_pv_khusus", ["status" => "aktif"], "nama_peserta");
+        }
         $data['tabs'] = 'pv khusus';
-        $kelas = $this->Akademik_model->get_all_kelas_pv_khusus();
         foreach ($kelas as $i => $kelas) {
             $data['kelas'][$i]['data'] = $kelas;
             $data['kelas'][$i]['peserta'] = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($kelas['id_kelas']));
@@ -61,10 +66,6 @@ class Kelas extends CI_CONTROLLER{
         $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
-        // ini_set('xdebug.var_display_max_depth', '10');
-        // ini_set('xdebug.var_display_max_children', '256');
-        // ini_set('xdebug.var_display_max_data', '1024');
-        // var_dump($data);
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
@@ -72,10 +73,15 @@ class Kelas extends CI_CONTROLLER{
         $this->load->view('templates/footer');
     }
     
-    public function pvluar(){
-        $data['title'] = 'Kelas Pv Luar';
+    public function pvluar($status){
+        if($status == "nonaktif"){
+            $data['title'] = 'Kelas PV Luar Nonaktif';
+            $kelas = $this->Main_model->get_all("kelas_pv_luar", ["status" => "nonaktif"], "nama_peserta");
+        } else {
+            $data['title'] = 'Kelas PV Luar Aktif';
+            $kelas = $this->Main_model->get_all("kelas_pv_luar", ["status" => "aktif"], "nama_peserta");
+        }
         $data['tabs'] = 'pv luar';
-        $kelas = $this->Akademik_model->get_all_kelas_pv_luar();
         foreach ($kelas as $i => $kelas) {
             $data['kelas'][$i]['data'] = $kelas;
             $data['kelas'][$i]['peserta'] = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($kelas['id_kelas']));
@@ -84,10 +90,6 @@ class Kelas extends CI_CONTROLLER{
         $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
-        // ini_set('xdebug.var_display_max_depth', '10');
-        // ini_set('xdebug.var_display_max_children', '256');
-        // ini_set('xdebug.var_display_max_data', '1024');
-        // var_dump($data);
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
@@ -244,11 +246,28 @@ class Kelas extends CI_CONTROLLER{
             if($result){
                 if($status == "aktif")
                     $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengaktifkan kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                else
+                elseif($status == "nonaktif")
                     $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menonaktifkan kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             } else {
                 $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal metubah status kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        public function pindah_wl(){
+            $id_kelas = $this->input->post("id_kelas", TRUE);
+
+            $data = [
+                "catatan" => $this->input->post("catatan", TRUE),
+                "tempat" => $this->input->post("tempat", TRUE),
+                "status" => "wl",
+                "nip" => NULL
+            ];
+            $this->Main_model->edit_data("kelas", ["id_kelas" => $id_kelas], $data);
+
+            $this->Main_model->edit_data("jadwal", ["id_kelas" => $id_kelas], ["status" => "nonaktif"]);
+            
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil memindahkan ke waiting list<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             redirect($_SERVER['HTTP_REFERER']);
         }
     // edit data

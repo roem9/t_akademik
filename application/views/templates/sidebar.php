@@ -33,8 +33,10 @@
             <a class="collapse-item text-light bg-success" href="#modalTambahKelasReguler" data-toggle="modal">Tambah Kelas Reguler</a>
             <a class="collapse-item text-light d-flex justify-content-between" href="<?= base_url()?>kelas/reguler/aktif">Reguler Aktif</a>
             <a class="collapse-item text-light bg-danger" href="<?= base_url()?>kelas/reguler/nonaktif">Reguler Nonaktif</a>
-            <a class="collapse-item text-light" href="<?= base_url()?>kelas/pvkhusus">Pv Khusus</a>
-            <a class="collapse-item text-light" href="<?= base_url()?>kelas/pvluar">Pv Luar</a>
+            <a class="collapse-item text-light d-flex justify-content-between" href="<?= base_url()?>kelas/pvkhusus/aktif">PV Khusus Aktif</a>
+            <a class="collapse-item text-light bg-danger" href="<?= base_url()?>kelas/pvkhusus/nonaktif">PV Khusus Nonaktif</a>
+            <a class="collapse-item text-light d-flex justify-content-between" href="<?= base_url()?>kelas/pvluar/aktif">PV Luar Aktif</a>
+            <a class="collapse-item text-light bg-danger" href="<?= base_url()?>kelas/pvluar/nonaktif">PV Luar Nonaktif</a>
           </div>
         </div>
       </li>
@@ -79,8 +81,7 @@
             <h6 class="collapse-header text-light">Waiting List</h6>
             <a class="collapse-item text-light" href="<?= base_url()?>wl/reguler">Reguler</a>
             <a class="collapse-item text-light" href="<?= base_url()?>wl/privat">Privat</a>
-            <a class="collapse-item text-light" href="<?= base_url()?>wl/pending">Pending</a>
-            <a class="collapse-item text-light" href="<?= base_url()?>wl/takhosus">Takhosus</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>wl/pending">Privat Pending</a>
           </div>
         </div>
       </li>

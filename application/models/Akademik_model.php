@@ -569,7 +569,6 @@ class Akademik_model extends CI_MODEL{
             }
             
             $data = [
-                "status" => $this->input->post("status", TRUE),
                 "nip" => $nip,
                 "pengajar" => $this->input->post("pengajar", TRUE),
                 "program" => $this->input->post("program", TRUE),

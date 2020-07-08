@@ -29,17 +29,17 @@
                     <div class="card-body cus-font">
                     <form action="<?= base_url()?>kelas/edit_kelas_privat" method="post" id="form-1">
                         <input type="hidden" name="id" id="id-edit">
-                        <div class="form-group">
-                        <label for="status-edit">Status</label>
-                        <select name="status" id="status-edit" class="form-control form-control-sm" required>
-                            <option value="">Pilih Status</option>
-                            <option value="aktif">Aktif</option>
-                            <option value="nonaktif">Nonaktif</option>
-                            <option value="wl">WL</option>
-                            <option value="konfirm">Konfirm</option>
-                            <option value="pending">Pending</option>
-                        </select>
-                        </div>
+                        <!-- <div class="form-group">
+                            <label for="status-edit">Status</label>
+                            <select name="status" id="status-edit" class="form-control form-control-sm" required>
+                                <option value="">Pilih Status</option>
+                                <option value="aktif">Aktif</option>
+                                <option value="nonaktif">Nonaktif</option>
+                                <option value="wl">WL</option>
+                                <option value="konfirm">Konfirm</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div> -->
                         <div class="form-group">
                         <label for="nip-edit">Pengajar</label>
                         <select name="nip" id="nip-edit" class="form-control form-control-sm">
@@ -144,9 +144,6 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-            </div>
             </div>
         </div>
     </div>
@@ -164,7 +161,7 @@
                 </div>
         </div>
     <?php endif; ?>
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4" style="<?php if($title == 'Waiting List Privat Pending'){echo 'max-width : 1000px';}?>">
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
@@ -190,7 +187,12 @@
                             foreach ($kelas as $kelas) :?>
                             <tr>
                                 <td><center><?=++$no?></center></td>
-                                <td><?= $kelas['data']['status']?>
+                                <?php if($kelas['data']['status'] == "wl"):?>
+                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/pending" onclick="return confirm('Yakin akan mem-pending kelas ini?')" class="btn btn-sm btn-outline-success">wl</a></td>
+                                <?php elseif($kelas['data']['status'] == "pending") :?>
+                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/wl" onclick="return confirm('Yakin akan memasukkan kelas ini ke waiting list?')" class="btn btn-sm btn-outline-secondary">pending</a></td>
+                                <?php endif;?>
+                                <!-- <td><?= $kelas['data']['status']?> -->
                                 <td><?= $kelas['data']['tipe_kelas']?></td>
                                 <td><?= $kelas['data']['nama_peserta']?></td>
                                 <td><?= $kelas['data']['no_hp']?>
@@ -199,7 +201,7 @@
                                     <td><?= $kelas['data']['nama_kpq']?>
                                 <?php endif;?>
                                 <td><center><?= $kelas['peserta']?></center></td>
-                                <td><center><a href="#modalKelasPrivat" class="badge badge-warning modalKelasPrivat" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>">detail</a></center></td>
+                                <td><center><a href="#modalKelasPrivat" class="btn btn-info btn-sm modalKelasPrivat" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>">detail</a></center></td>
                                 <?php if($tabs != "pending"):?>
                                     <?php if($kelas['data']['nama_kpq'] == ''):?>
                                         <td><center>-</center></td>

@@ -27,6 +27,10 @@ class Badal extends CI_CONTROLLER{
         }
 
         $data['tabs'] = "jadwal";
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         $this->load->view("templates/header", $data);
         $this->load->view("templates/sidebar");
@@ -40,6 +44,10 @@ class Badal extends CI_CONTROLLER{
         $data['tabs'] = "konfirmasi";
 
         $data['jadwal'] = $this->Akademik_model->get_konfirmasi_badal();
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         // var_dump($data);
         $this->load->view("templates/header", $data);
@@ -58,6 +66,10 @@ class Badal extends CI_CONTROLLER{
         $data['tabs'] = "badal";
 
         $data['jadwal'] = $this->Akademik_model->get_badal_no_rekap();
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         // var_dump($data);
         $this->load->view("templates/header", $data);

@@ -14,6 +14,10 @@ class Other extends CI_CONTROLLER{
         $data['title'] = "Data Program";
 
         $data['program'] = $this->Akademik_model->get_all_program();
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         $this->load->view("templates/header", $data);
         $this->load->view("templates/sidebar");

@@ -63,6 +63,10 @@ class Laporan extends CI_CONTROLLER{
                 $data['laporan'][$i]['bulan'][$j] = $bulan;
             }
         }
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         // ini_set('xdebug.var_display_max_depth', '10');
         // ini_set('xdebug.var_display_max_children', '256');
@@ -103,7 +107,10 @@ class Laporan extends CI_CONTROLLER{
             $data['pengajar']['kbm_badal'][$k] = $badal;
         }
         
-        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
+
         $this->load->view("templates/header", $data);
         $this->load->view("templates/sidebar");
         $this->load->view("laporan/rekap-bulanan-kpq", $data);
@@ -282,6 +289,10 @@ class Laporan extends CI_CONTROLLER{
             $data['kesediaan'][$i]['pria'] = COUNT($this->Akademik_model->get_kpq_by_kesediaan($kesediaan['waktu'], 'Pria'));
             $data['kesediaan'][$i]['wanita'] = COUNT($this->Akademik_model->get_kpq_by_kesediaan($kesediaan['waktu'], 'Wanita'));
         }
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         $this->load->view("templates/header", $data);
         $this->load->view("templates/sidebar");

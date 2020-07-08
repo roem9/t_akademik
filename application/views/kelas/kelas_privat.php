@@ -32,7 +32,7 @@
                     <div class="card-body cus-font">
                     <form action="<?= base_url()?>kelas/edit_kelas_privat" method="post" id="form-1">
                         <input type="hidden" name="id" id="id-edit">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                         <label for="status-edit">Status</label>
                         <select name="status" id="status-edit" class="form-control form-control-sm" required>
                             <option value="">Pilih Status</option>
@@ -41,7 +41,7 @@
                             <option value="wl">WL</option>
                             <option value="konfirm">Konfirm</option>
                         </select>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                         <label for="nip-edit">Pengajar</label>
                         <select name="nip" id="nip-edit" class="form-control form-control-sm">
@@ -73,8 +73,8 @@
                         <div class="form-group" id="koor-form">
                         </div>
                         <div class="form-group">
-                        <label for="catatan-edit">Catatan</label>
-                        <textarea name="catatan" id="catatan-edit" class="form-control form-control-sm"></textarea>
+                            <label for="catatan-edit">Catatan</label>
+                            <textarea name="catatan" id="catatan-edit" class="form-control form-control-sm"></textarea>
                         </div>
                         <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-sm btn-success" id="btn-edit">Edit</button>
@@ -163,6 +163,44 @@
     </div>
 <!-- modal kelas privat -->
 
+<!-- modal pindah wl -->
+    <div class="modal fade" id="modalPindahWl" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPindahWlTitle">Pindah Ke Waiting List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fa fa-exclamation-circle text-warning mr-1"></i> <strong>Perhatian</strong>! ketika kelas privat dipindahkan ke waiting list maka jadwal dan pengajar dari kelas akan dihapus. Harap mengisi jadwal dan detail peserta pada form catatan
+                    </div>
+                    <form action="<?=base_url()?>kelas/pindah_wl" method="post">
+                        <input type="hidden" name="id_kelas" id="id_kelas">
+                        <div class="form-group">
+                            <label for="koor">Koordinator</label>
+                            <input type="text" name="koor" id="p_koor" class="form-control form-control-sm" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="p_catatan">Catatan</label>
+                            <textarea name="catatan" id="p_catatan" class="form-control form-control-sm" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="p_tempat">Tempat</label>
+                            <textarea name="tempat" id="p_tempat" class="form-control form-control-sm" required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="submit" value="Pindah WL" class="btn btn-sm btn-warning" id="pindah-wl">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- modal pindah wl -->
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -180,20 +218,7 @@
     <?php endif; ?>
 
     <!-- DataTales Example -->
-    <div class="card shadow mb-4" style="max-width:950px">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'reguler') echo 'active'?>" href="<?= base_url()?>kelas/reguler">Reguler</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'pv khusus') echo 'active'?>" href="<?= base_url()?>kelas/pvkhusus">Pv Khusus</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'pv luar') echo 'active'?>" href="<?= base_url()?>kelas/pvluar">Pv Luar</a>
-                </li>
-            </ul>
-        </div>
+    <div class="card shadow mb-4" style="max-width:1100px">
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
@@ -206,6 +231,7 @@
                         <th>Pengajar</th>
                         <th>Peserta</th>
                         <th>Detail</th>
+                        <th>Pindah WL</th>
                     </thead>
                     <tbody>
                         <?php
@@ -213,13 +239,23 @@
                             foreach ($kelas as $kelas) :?>
                             <tr>
                                 <td><center><?=++$no?></center></td>
-                                <td><?= $kelas['data']['status']?>
+                                <!-- <td><?= $kelas['data']['status']?> -->
+                                <?php if($kelas['data']['status'] == "aktif"):?>
+                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/nonaktif" onclick="return confirm('Yakin akan menonaktifkan kelas ini?')" class="btn btn-sm btn-outline-success">aktif</a></td>
+                                <?php elseif($kelas['data']['status'] == "nonaktif") :?>
+                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/aktif" onclick="return confirm('Yakin akan mengaktifkan kelas ini?')" class="btn btn-sm btn-outline-secondary">nonaktif</a></td>
+                                <?php endif;?>
                                 <td><?= $kelas['data']['nama_peserta']?></td>
                                 <td><?= $kelas['data']['no_hp']?>
                                 <td><?= $kelas['data']['program']?>
                                 <td><?= $kelas['data']['nama_kpq']?>
                                 <td><center><?= $kelas['peserta']?></center></td>
-                                <td><center><a href="#modalKelasPrivat" class="badge badge-warning modalKelasPrivat" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>|<?= $kelas['data']['id_peserta']?>">detail</a></center></td>
+                                <td><center><a href="#modalKelasPrivat" class="btn btn-sm btn-info modalKelasPrivat" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>|<?= $kelas['data']['id_peserta']?>">detail</a></center></td>
+                                <td>
+                                    <center>
+                                        <a href="#modalPindahWl" data-id="<?= $kelas['data']['id_kelas']?>|<?= $kelas['data']['nama_peserta']?>" data-toggle="modal" class="btn btn-sm btn-outline-warning modalPindahWl">WL</a>
+                                    </center>
+                                </td>
                             </tr>
                         <?php endforeach;?>
                     </tbody>
@@ -231,6 +267,27 @@
 
 <script>
     $("#kelas").addClass("active");
+
+    $(".modalPindahWl").click(function(){
+        let data = $(this).data("id");
+        data = data.split("|");
+        let id = data[0];
+        let nama_peserta = data[1];
+
+        $.ajax({
+            url : "<?= base_url()?>kelas/get_data_kelas_privat",
+            method : "POST",
+            data : {id: id},
+            async : true,
+            dataType : 'json',
+            success : function(data){
+                $("#id_kelas").val(data.id_kelas);
+                $("#p_catatan").val(data.catatan);
+                $("#p_tempat").val(data.tempat);
+                $("#p_koor").val(nama_peserta);
+            }
+        })
+    })
 
     $(".modalKelasPrivat").click(function(){
         
@@ -457,6 +514,11 @@
     
     $("#btn-add-kelas").click(function(){
         var c = confirm("Yakin akan menambahkan kelas reguler?");
+        return c;
+    })
+
+    $("#pindah-wl").click(function(){
+        var c = confirm("Yakin akan memindahkan kelas ini ke waiting list?");
         return c;
     })
 </script>

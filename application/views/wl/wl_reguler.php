@@ -1,6 +1,6 @@
 <!-- modal wl reguler -->
     <div class="modal fade" id="modalWlReguler" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalWlRegulerTitle"></h5>
@@ -20,9 +20,6 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#" class='nav-link' id="btn-form-3"><i class="fas fa-list"></i></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class='nav-link' id="btn-form-4"><i class="fas fa-user-shield"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -91,46 +88,6 @@
                         </div>
                         <div class="d-flex justify-content-end">
                         <input type="submit" value="Pindah WL" class="btn btn-sm btn-warning mt-3" id="btn-wl">
-                        </div>
-                    </form>
-                    
-                    <form action="<?= base_url()?>kelas/pindah_takhosus" method="post" id="form-4">
-                        <div class="alert alert-info"><i class="fa fa-info-circle mr-1 text-info"></i> Menu ini untuk mengubah waktu atau program dari waiting list takhosus peserta reguler</div>
-                        <ul class="list-group list-peserta-wl-takhosus"></ul>
-                        <div class="form-group mt-3">
-                        <label for="program-wl">Program</label>
-                        <select name="program" id="program-wl" class="form-control form-control-sm" required> 
-                            <option value="">Pilih Program</option>
-                            <?php foreach ($program as $prog) :?>
-                            <option value="<?= $prog['nama_program']?>"><?= $prog['nama_program']?></option>
-                            <?php endforeach;?>
-                        </select>
-                        </div>
-                        <div class="form-group">
-                        <label for="hari-wl">Hari</label>
-                        <select name="hari" id="hari-wl" class="form-control form-control-sm" required>
-                            <option value="">Pilih Hari</option>
-                            <option value="Ahad">Ahad</option>
-                            <option value="Senin">Senin</option>
-                            <option value="Selasa">Selasa</option>
-                            <option value="Rabu">Rabu</option>
-                            <option value="Kamis">Kamis</option>
-                            <option value="Jumat">Jumat</option>
-                            <option value="Sabtu">Sabtu</option>
-                        </select>
-                        </div>
-                        <div class="form-group">
-                        <label for="jam-wl">Waktu</label>
-                        <select name="jam" id="jam-wl" class="form-control form-control-sm" required>
-                            <option value="">Pilih Waktu</option>
-                            <option value="08.30-10.00">08.30-10.00</option>
-                            <option value="10.00-11.30">10.00-11.30</option>
-                            <option value="13.00-14.30">13.00-14.30</option>
-                            <option value="15.30-17.00">15.30-17.00</option>
-                        </select>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                        <input type="submit" value="Pindah Takhosus" class="btn btn-sm btn-success mt-3" id="btn-takhosus">
                         </div>
                     </form>
                     </div>
@@ -208,7 +165,7 @@
         $("#modalWlRegulerTitle").html(data[0]+" "+data[1]);
 
         $.ajax({
-            url : "<?= base_url()?>wl/get_peserta_wl_reguler_takhosus_by_kategori",
+            url : "<?= $link?>",
             method : "POST",
             data : {id: id},
             async : true,
@@ -223,9 +180,14 @@
                     html += '<li class="list-group-item d-flex justify-content-between"><span><div class="form-check">'+
                                 '<input class="form-check-input" name="id_peserta['+i+']" type="checkbox" value="'+data[i].id_peserta+'" id="'+i+'">'+
                                 '<label class="form-check-label" for="'+i+'">'+
-                                    data[i].tgl + " " + data[i].nama_peserta + 
+                                    data[i].nama_peserta + 
                                 '</label>'+
-                            '</div></span><span>'+ data[i].tgl_lahir +'</span></li>';
+                            '</div></span></li>'+
+                            '<li class="list-group-item list-group-item-secondary d-flex justify-content-between">'+
+                                '<span><strong>Daftar</strong> : '+ data[i].tgl +'</span>'+
+                                '<span><strong>TL</strong> : '+ data[i].tgl_lahir +'</span>'+
+                                '<span><strong>No. Hp</strong> : '+ data[i].no_hp +'</span>'+
+                            '</li>';
                 }
                 $(".list-peserta-pindah").html(html);
                 
@@ -248,18 +210,6 @@
                             '</div></li>';
                 }
                 $(".list-peserta-wl").html(html2);
-                
-                html2 = "";
-                for (let i = 0; i < data.length; i++) {
-                    html2 += '<li class="list-group-item"><div class="form-check">'+
-                                '<input class="form-check-input" name="id_peserta['+i+']" type="checkbox" value="'+data[i].id_peserta+'" id="k'+i+'">'+
-                                '<label class="form-check-label" for="k'+i+'">'+
-                                    data[i].nama_peserta+
-                                '</label>'+
-                            '</div></li>';
-                }
-                $(".list-peserta-wl-takhosus").html(html2);
-                
             }
         })
     })
@@ -267,54 +217,35 @@
     
     $("#form-2").hide();
     $("#form-3").hide();
-    $("#form-4").hide();
     
     $("#btn-form-1").click(function(){
         $("#btn-form-1").addClass('active');
         $("#btn-form-2").removeClass('active');
         $("#btn-form-3").removeClass('active');
-        $("#btn-form-4").removeClass('active');
         
         $("#form-1").show();
         $("#form-2").hide();
         $("#form-3").hide();
-        $("#form-4").hide();
     })
     
     $("#btn-form-2").click(function(){
         $("#btn-form-1").removeClass('active');
         $("#btn-form-2").addClass('active');
         $("#btn-form-3").removeClass('active');
-        $("#btn-form-4").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").show();
         $("#form-3").hide();
-        $("#form-4").hide();
     })
     
     $("#btn-form-3").click(function(){
         $("#btn-form-1").removeClass('active');
         $("#btn-form-2").removeClass('active');
         $("#btn-form-3").addClass('active');
-        $("#btn-form-4").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").hide();
         $("#form-3").show();
-        $("#form-4").hide();
-    })
-    
-    $("#btn-form-4").click(function(){
-        $("#btn-form-1").removeClass('active');
-        $("#btn-form-2").removeClass('active');
-        $("#btn-form-3").removeClass('active');
-        $("#btn-form-4").addClass('active');
-        
-        $("#form-1").hide();
-        $("#form-2").hide();
-        $("#form-3").hide();
-        $("#form-4").show();
     })
     
     $("#btn-pindah").click(function(){
@@ -334,11 +265,6 @@
     
     $("#btn-add-kelas").click(function(){
         var c = confirm("Yakin akan menambahkan kelas reguler?");
-        return c;
-    })
-    
-    $("#btn-takhosus").click(function(){
-        var c = confirm("Yakin akan memindahkan peserta ke takhosus?");
         return c;
     })
 </script>

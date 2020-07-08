@@ -51,6 +51,10 @@ class Home extends CI_CONTROLLER{
         // ini_set('xdebug.var_display_max_data', '1024');
 
         // var_dump($data);
+        
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
 
         $this->load->view("templates/header", $data);
         $this->load->view("templates/sidebar");

@@ -24,9 +24,6 @@
                       <li class="nav-item">
                         <a href="#" class='nav-link' id="btn-form-4"><i class="fas fa-list-ul"></i></a>
                       </li>
-                      <li class="nav-item">
-                        <a href="#" class='nav-link' id="btn-form-5"><i class="fas fa-user-shield"></i></a>
-                      </li>
                   </ul>
               </div>
               <div class="card-body cus-font">
@@ -168,48 +165,6 @@
                     <input type="submit" value="Pindah WL" class="btn btn-sm btn-warning mt-3" id="btn-wl">
                   </div>
                 </form>
-
-                <form action="<?= base_url()?>kelas/pindah_takhosus" method="post" id="form-5">
-                  <div class="alert alert-info">
-                    <i class="fa fa-info-circle text-info mr-1"></i> Menu ini untuk memindahkan peserta reguler ke takhosus
-                  </div>
-                  <ul class="list-group list-peserta-wl-takhosus"></ul>
-                  <div class="form-group mt-3">
-                    <label for="program-wl">Program</label>
-                    <select name="program" id="program-wl" class="form-control form-control-sm" required> 
-                      <option value="">Pilih Program</option>
-                      <?php foreach ($program as $prog) :?>
-                        <option value="<?= $prog['nama_program']?>"><?= $prog['nama_program']?></option>
-                      <?php endforeach;?>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="hari-wl">Hari</label>
-                    <select name="hari" id="hari-wl" class="form-control form-control-sm" required>
-                      <option value="">Pilih Hari</option>
-                      <option value="Ahad">Ahad</option>
-                      <option value="Senin">Senin</option>
-                      <option value="Selasa">Selasa</option>
-                      <option value="Rabu">Rabu</option>
-                      <option value="Kamis">Kamis</option>
-                      <option value="Jumat">Jumat</option>
-                      <option value="Sabtu">Sabtu</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="jam-wl">Waktu</label>
-                    <select name="jam" id="jam-wl" class="form-control form-control-sm" required>
-                      <option value="">Pilih Waktu</option>
-                      <option value="08.30-10.00">08.30-10.00</option>
-                      <option value="10.00-11.30">10.00-11.30</option>
-                      <option value="13.00-14.30">13.00-14.30</option>
-                      <option value="15.30-17.00">15.30-17.00</option>
-                    </select>
-                  </div>
-                  <div class="d-flex justify-content-end">
-                    <input type="submit" value="Takhosus" class="btn btn-sm btn-success mt-3" id="btn-takhosus">
-                  </div>
-                </form>
               </div>
           </div>
         </div>
@@ -341,18 +296,6 @@
                             '</div></li>';
                 }
                 $(".list-peserta-wl").html(html2);
-                
-                html2 = "";
-                for (let i = 0; i < data.length; i++) {
-                    html2 += '<li class="list-group-item"><div class="form-check">'+
-                                '<input class="form-check-input" name="id_peserta['+i+']" type="checkbox" value="'+data[i].id_peserta+'" id="k'+i+'">'+
-                                '<label class="form-check-label" for="k'+i+'">'+
-                                    data[i].nama_peserta+
-                                '</label>'+
-                            '</div></li>';
-                }
-                $(".list-peserta-wl-takhosus").html(html2);
-                // console.log(data)
             }
         })
     })
@@ -360,20 +303,17 @@
     $("#form-2").hide();
     $("#form-3").hide();
     $("#form-4").hide();
-    $("#form-5").hide();
     
     $("#btn-form-1").click(function(){
         $("#btn-form-1").addClass('active');
         $("#btn-form-2").removeClass('active');
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").removeClass('active');
-        $("#btn-form-5").removeClass('active');
         
         $("#form-1").show();
         $("#form-2").hide();
         $("#form-3").hide();
         $("#form-4").hide();
-        $("#form-5").hide();
     })
     
     $("#btn-form-2").click(function(){
@@ -381,13 +321,11 @@
         $("#btn-form-2").addClass('active');
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").removeClass('active');
-        $("#btn-form-5").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").show();
         $("#form-3").hide();
         $("#form-4").hide();
-        $("#form-5").hide();
     })
     
     $("#btn-form-3").click(function(){
@@ -395,13 +333,11 @@
         $("#btn-form-2").removeClass('active');
         $("#btn-form-3").addClass('active');
         $("#btn-form-4").removeClass('active');
-        $("#btn-form-5").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").hide();
         $("#form-3").show();
         $("#form-4").hide();
-        $("#form-5").hide();
     })
     
     $("#btn-form-4").click(function(){
@@ -409,27 +345,11 @@
         $("#btn-form-2").removeClass('active');
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").addClass('active');
-        $("#btn-form-5").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").hide();
         $("#form-3").hide();
         $("#form-4").show();
-        $("#form-5").hide();
-    })
-    
-    $("#btn-form-5").click(function(){
-        $("#btn-form-1").removeClass('active');
-        $("#btn-form-2").removeClass('active');
-        $("#btn-form-3").removeClass('active');
-        $("#btn-form-4").removeClass('active');
-        $("#btn-form-5").addClass('active');
-        
-        $("#form-1").hide();
-        $("#form-2").hide();
-        $("#form-3").hide();
-        $("#form-4").hide();
-        $("#form-5").show();
     })
     
     $("#btn-edit").click(function(){
@@ -456,9 +376,5 @@
         var c = confirm("Yakin akan menambahkan kelas reguler?");
         return c;
     })
-    
-    $("#btn-takhosus").click(function(){
-        var c = confirm("Yakin akan memindahkan peserta ke takhosus?");
-        return c;
-    })
+
 </script>
