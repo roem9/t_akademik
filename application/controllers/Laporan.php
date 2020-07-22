@@ -4,6 +4,7 @@ class Laporan extends CI_CONTROLLER{
     public function __construct(){
         parent::__construct();
         $this->load->model("Akademik_model");
+        $this->load->model("Main_model");
         if($this->session->userdata('status') != "login"){
             $this->session->set_flashdata('login', 'Maaf, Anda harus login terlebih dahulu');
 			redirect(base_url("login"));
@@ -49,7 +50,6 @@ class Laporan extends CI_CONTROLLER{
         $this->load->view("laporan/rekap", $data);
         $this->load->view("templates/footer", $data);
     }
-
     
     public function index(){
         $data['month'] = ["0" => "-", "1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
@@ -75,7 +75,48 @@ class Laporan extends CI_CONTROLLER{
         // var_dump($data);
         $this->load->view("templates/header", $data);
         $this->load->view("templates/sidebar");
-        $this->load->view("laporan/laporan", $data);
+        // $this->load->view("laporan/laporan", $data);
+        $this->load->view("laporan/form-laporan", $data);
+        $this->load->view("templates/footer", $data);
+    }
+
+    public function kelasNonaktif(){
+        $data['title'] = "Laporan Kelas Nonaktif";
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
+        $data['history'] = $this->Main_model->get_all("history_kelas","", "tgl_history", "DESC");
+
+        
+        // ini_set('xdebug.var_display_max_depth', '10');
+        // ini_set('xdebug.var_display_max_children', '256');
+        // ini_set('xdebug.var_display_max_data', '1024');
+
+        // var_dump($data['history']);
+        
+        $this->load->view("templates/header", $data);
+        $this->load->view("templates/sidebar");
+        $this->load->view("laporan/kelas-nonaktif", $data);
+        $this->load->view("templates/footer", $data);
+    }
+    
+    public function pesertaNonaktif(){
+        $data['title'] = "Laporan Peserta Nonaktif";
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
+        $data['history'] = $this->Main_model->get_all("history_peserta","", "tgl_history", "DESC");
+
+        
+        // ini_set('xdebug.var_display_max_depth', '10');
+        // ini_set('xdebug.var_display_max_children', '256');
+        // ini_set('xdebug.var_display_max_data', '1024');
+
+        // var_dump($data['history']);
+        
+        $this->load->view("templates/header", $data);
+        $this->load->view("templates/sidebar");
+        $this->load->view("laporan/peserta-nonaktif", $data);
         $this->load->view("templates/footer", $data);
     }
 
@@ -230,33 +271,30 @@ class Laporan extends CI_CONTROLLER{
     }
 
     public function cetak_laporan(){
-        $tgl = date('M Y', strtotime("-1 MONTH"));
-        $bulan = date('n', strtotime($tgl));
-        $tahun = date('Y', strtotime($tgl));
-
         $laporan = $this->input->post("laporan");
+        $bulan = $this->input->post("bulan");
+        $tahun = $this->input->post("tahun");
 
         if($laporan == "Rekap KBM"){
             // export excel
-            $filename = "Rekap {$bulan}-{$tahun}";
-
+            $filename = "Rekap KBM {$bulan}-{$tahun}";
+    
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
-
+    
             $month = ["1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
             $data['title'] = "Rekap KBM {$month[$bulan]} {$tahun}";
             $data["pengajar"] = [];
             
             $nip = $this->Akademik_model->get_all_kpq();
             $data['pengajar'] = [];
-
+    
             foreach ($nip as $key => $nip) {
                 $data['pengajar'][$key] = $nip;
                 $kelas = $this->Akademik_model->get_kelas_kpq_by_periode($bulan, $tahun, $nip['nip']);
                 foreach ($kelas as $i => $kelas) {
                     $data['pengajar'][$key]['kelas'][$i] = $kelas;
-                    $jumlah_peserta = $this->Akademik_model->get_jumlah_peserta_kelas_by_periode($bulan, $tahun, $kelas['id_jadwal']);
-                    $data['pengajar'][$key]['kelas'][$i]['jumlah_peserta'] = $jumlah_peserta['jum_peserta'];
+                    $data['pengajar'][$key]['kelas'][$i]['jum_peserta'] = COUNT($this->Akademik_model->get_all_peserta_hadir_by_periode($bulan, $tahun, $kelas['id_kelas']));
                     $kbm = $this->Akademik_model->get_tgl_kbm_by_periode($bulan, $tahun, $nip['nip'], $kelas['id_jadwal']);
                     foreach ($kbm as $j => $kbm) {
                         $data['pengajar'][$key]['kelas'][$i]['kbm'][$j] = $kbm;
@@ -270,12 +308,106 @@ class Laporan extends CI_CONTROLLER{
                     $data['pengajar'][$key]['kbm_badal'][$k] = $badal;
                 }
             }
-
             $this->load->view("laporan/rekap-bulanan", $data);
 
         } else if($laporan == "Rekap Peserta"){
+            $filename = "Rekap Peserta {$bulan}-{$tahun}";
 
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+
+            $month = ["1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
+            $data['title'] = "Periode {$month[$bulan]} {$tahun}";
+
+            $kpq = $this->Akademik_model->get_all_kpq();
+            $i = 1;
+
+            foreach ($kpq as $kpq) {
+                $kelas = $this->Akademik_model->get_kelas_kpq_by_periode($bulan, $tahun, $kpq['nip']);
+                
+                if(COUNT($kelas) != 0){
+                    $data['laporan'][$i]['kpq'] = $kpq;
+
+                    foreach ($kelas as $j => $kelas) {
+                        $data['laporan'][$i]['kelas'][$j] = $kelas;
+                        $data['laporan'][$i]['kelas'][$j]['peserta_kbm'] = $this->Akademik_model->get_all_peserta_hadir_by_periode($bulan, $tahun, $kelas['id_kelas']);
+                    }
+                    $i++;
+                }
+            }
+            
+            // ini_set('xdebug.var_display_max_depth', '10');
+            // ini_set('xdebug.var_display_max_children', '256');
+            // ini_set('xdebug.var_display_max_data', '1024');
+            // var_dump($data);
+
+            $this->load->view("laporan/rekap-peserta", $data);
         } else if($laporan == "Rekap Pengajaran"){
+            $filename = "Rekap Pengajaran {$bulan}-{$tahun}";
+
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+
+            $month = ["1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
+            $data['title'] = "Periode {$month[$bulan]} {$tahun}";
+
+            $kpq = $this->Akademik_model->get_all_kpq();
+            $i = 1;
+
+            foreach ($kpq as $kpq) {
+                $kelas = $this->Akademik_model->get_kelas_kpq_by_periode($bulan, $tahun, $kpq['nip']);
+                
+                if(COUNT($kelas) != 0){
+                    $data['laporan'][$i]['kpq'] = $kpq;
+
+                    foreach ($kelas as $j => $kelas) {
+                        $data['laporan'][$i]['kelas'][$j] = $kelas;
+                        $data['laporan'][$i]['kelas'][$j]['peserta_kbm'] = $this->Akademik_model->get_all_peserta_hadir_by_periode($bulan, $tahun, $kelas['id_kelas']);
+                    }
+                    $i++;
+                }
+            }
+            
+            // ini_set('xdebug.var_display_max_depth', '10');
+            // ini_set('xdebug.var_display_max_children', '256');
+            // ini_set('xdebug.var_display_max_data', '1024');
+            // var_dump($data);
+
+            $this->load->view("laporan/rekap-pengajaran", $data);
+        } else if($laporan == "Kelas Nonaktif"){
+            $filename = "Kelas PV Nonaktif {$bulan}-{$tahun}";
+            
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+            
+            $month = ["1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
+            $data['title'] = "Periode {$month[$bulan]} {$tahun}";
+
+            $data['laporan'] = $this->Main_model->get_all("history_kelas", "MONTH(tgl_history) = $bulan AND YEAR(tgl_history) = $tahun", "nama_kpq", "ASC");
+            
+            // ini_set('xdebug.var_display_max_depth', '10');
+            // ini_set('xdebug.var_display_max_children', '256');
+            // ini_set('xdebug.var_display_max_data', '1024');
+            // var_dump($data);
+
+            $this->load->view("laporan/rekap-kelas-nonaktif", $data);
+        } else if($laporan == "Peserta Nonaktif"){
+            $filename = "Peserta Reguler Nonaktif {$bulan}-{$tahun}";
+            
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+            
+            $month = ["1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
+            $data['title'] = "Periode {$month[$bulan]} {$tahun}";
+
+            $data['laporan'] = $this->Main_model->get_all("history_peserta", "MONTH(tgl_history) = $bulan AND YEAR(tgl_history) = $tahun", "nama_kpq", "ASC");
+            
+            // ini_set('xdebug.var_display_max_depth', '10');
+            // ini_set('xdebug.var_display_max_children', '256');
+            // ini_set('xdebug.var_display_max_data', '1024');
+            // var_dump($data);
+
+            $this->load->view("laporan/rekap-peserta-nonaktif", $data);
 
         }
     }
@@ -309,5 +441,52 @@ class Laporan extends CI_CONTROLLER{
 
         $data = $this->Akademik_model->get_kpq_by_kesediaan($waktu, $jk);
         echo json_encode($data);
+    }
+
+    public function get_history(){
+        $id = $this->input->post("id");
+        $data = $this->Main_model->get_one("history_kelas", ["id" => $id]);
+        echo json_encode($data);
+    }
+
+    public function history_peserta(){
+        $id = $this->input->post("id");
+        $data = $this->Main_model->get_one("history_peserta", ["id" => $id]);
+        echo json_encode($data);
+    }
+
+    // edit
+    public function edit_history(){
+        $id = $this->input->post("id");
+        $data = [
+            "tgl_history" => $this->input->post("tgl_history")
+        ];
+
+        // hapus / edit
+        if(isset($_POST['hapus'])){
+            $this->Main_model->delete_data("history_kelas", ["id" => $id]);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menghapus data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        } else if(isset($_POST['edit'])){
+            $this->Main_model->edit_data("history_kelas", ["id" => $id], $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengubah data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function edit_history_peserta(){
+        $id = $this->input->post("id");
+        $data = [
+            "tgl_history" => $this->input->post("tgl_history")
+        ];
+
+        // hapus / edit
+        if(isset($_POST['hapus'])){
+            $this->Main_model->delete_data("history_peserta", ["id" => $id]);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menghapus data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        } else if(isset($_POST['edit'])){
+            $this->Main_model->edit_data("history_peserta", ["id" => $id], $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengubah data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+        redirect($_SERVER['HTTP_REFERER']);
     }
 }

@@ -33,19 +33,6 @@
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4" style="max-width: 520px">
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'jadwal') echo 'active'?>" href="<?= base_url()?>badal/jadwal">Jadwal</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'konfirmasi') echo 'active'?>" href="<?= base_url()?>badal/konfirmasi">Konfirmasi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php if($tabs == 'badal') echo 'active'?>" href="<?= base_url()?>badal/rekap">Rekap</a>
-                </li>
-            </ul>
-        </div>
         <div class="card-body">
             <div class="table-responsive">
             <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">

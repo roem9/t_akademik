@@ -157,7 +157,7 @@
               <form action="<?=base_url()?>other/add_program" method="post">
                   <div class="form-group">
                     <label for="program-nama">Program</label>
-                    <input type="text" name="program" id="program-nama" class="form-control form-control-sm">
+                    <input type="text" name="program" id="program-nama" class="form-control form-control-sm" required>
                   </div>
                   <div class="d-flex justify-content-end">
                     <input type="submit" value="Tambah Program" class="btn btn-sm btn-primary" id="btn-add-program">
@@ -168,6 +168,16 @@
       </div>
     </div>
   <!-- modal add program -->
+  <script>
+    $("#btn-add-program").click(function(){
+      var c = confirm("Yakin akan menambahkan program baru?");
+      return c;
+    })
 
+    $("#btn-add-kelas").click(function(){
+      var c = confirm("Yakin akan menambahkan kelas reguler baru?");
+      return c;
+    })
+  </script>
   <!-- Page Wrapper -->
   <div id="wrapper">

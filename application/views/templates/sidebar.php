@@ -49,9 +49,12 @@
         <div id="droptwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-primary py-2 collapse-inner rounded">
             <h6 class="collapse-header text-light">Peserta</h6>
-            <a class="collapse-item text-light" href="<?= base_url()?>peserta/reguler">Reguler</a>
-            <a class="collapse-item text-light" href="<?= base_url()?>peserta/pvkhusus">Pv Khusus</a>
-            <a class="collapse-item text-light" href="<?= base_url()?>peserta/pvluar">Pv Luar</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>peserta/reguler/aktif">Reguler Aktif</a>
+            <a class="collapse-item text-light bg-danger" href="<?= base_url()?>peserta/reguler/nonaktif">Reguler Nonaktif</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>peserta/pvkhusus/aktif">Pv Khusus Aktif</a>
+            <a class="collapse-item text-light bg-danger" href="<?= base_url()?>peserta/pvkhusus/nonaktif">Pv Khusus Nonaktif</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>peserta/pvluar/aktif">Pv Luar Aktif</a>
+            <a class="collapse-item text-light bg-danger" href="<?= base_url()?>peserta/pvluar/nonaktif">Pv Luar Nonaktif</a>
           </div>
         </div>
       </li>
@@ -64,8 +67,8 @@
         <div id="dropsix" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-primary py-2 collapse-inner rounded">
             <h6 class="collapse-header text-light">Badal</h6>
-            <a class="collapse-item text-light" href="<?= base_url()?>badal/jadwal">Jadwal</a>
             <a class="collapse-item text-light" href="<?= base_url()?>badal/konfirmasi">Konfirmasi</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>badal/jadwal">Jadwal</a>
             <a class="collapse-item text-light" href="<?= base_url()?>badal/rekap">Rekap</a>
           </div>
         </div>
@@ -95,6 +98,8 @@
           <div class="bg-primary py-2 collapse-inner rounded">
             <h6 class="collapse-header text-light">Laporan</h6>
             <a class="collapse-item text-light" href="<?= base_url()?>laporan/rekap">Rekap KBM</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>laporan/kelasnonaktif">Kelas Nonaktif</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>laporan/pesertanonaktif">Peserta Nonaktif</a>
             <a class="collapse-item text-light" href="<?= base_url()?>laporan/">Download Laporan</a>
           </div>
         </div>
@@ -115,8 +120,8 @@
         <div id="dropfive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-primary py-2 collapse-inner rounded">
             <h6 class="collapse-header text-light">Lainnya</h6>
+            <a class="collapse-item text-light bg-success" href="#modalAddProgram" data-toggle="modal">Tambah Program</a>
             <a class="collapse-item text-light" href="<?= base_url()?>other/program">Program</a>
-            <a class="collapse-item text-light" href="#modalAddProgram" data-toggle="modal">Tambah Program</a>
           </div>
         </div>
       </li>

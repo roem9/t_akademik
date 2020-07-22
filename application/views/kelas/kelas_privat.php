@@ -84,7 +84,7 @@
                     <form action="<?= base_url()?>kelas/nonaktif_peserta" method="post" id="form-2">
                         <div class="alert alert-info"><i class="fa fa-info-circle mr-1 text-info"></i> menu ini berisi list peserta aktif. pilih peserta kemudian pilih tombol nonaktif untuk menonaktifkan peserta</div>
                         <ul class="list-group list-peserta-aktif"></ul>
-
+                        <input type="hidden" name="id_kelas">
                         <div class="d-flex justify-content-end mt-3">
                         <input type="submit" value="Nonaktif" class="btn btn-sm btn-danger" id="btn-nonaktif-peserta">
                         </div>
@@ -100,9 +100,14 @@
                     </form>
 
                     <form action="<?= base_url()?>kelas/nonaktif_jadwal" method="post" id="form-4">
+                        <input type="hidden" name="id_kelas">
                         <ul class="list-group list-jadwal-nonaktif"></ul>
+                        <div class="form-group mt-3">
+                            <label for="tgl_history">Tgl Nonaktif</label>
+                            <input type="date" name="tgl_history" class="form-control form-control-sm" required>
+                        </div>
                         <div class="d-flex justify-content-end">
-                        <input type="submit" value="Nonaktif" class="btn btn-sm btn-danger mt-3" id="btn-nonaktif-jadwal">
+                            <input type="submit" value="Nonaktif" class="btn btn-sm btn-danger mt-3" id="btn-nonaktif-jadwal">
                         </div>
                     </form>
 
@@ -155,9 +160,6 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-            </div>
             </div>
         </div>
     </div>
@@ -201,6 +203,40 @@
     </div>
 <!-- modal pindah wl -->
 
+<!-- modal nonaktif -->
+    <div class="modal fade" id="modalNonaktif" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNonaktifTitle">Nonaktifkan Kelas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="alert alert-warning">
+                        <i class="fa fa-exclamation-circle text-warning mr-1"></i> <strong>Perhatian</strong>! ketika kelas privat dipindahkan ke waiting list maka jadwal dan pengajar dari kelas akan dihapus. Harap mengisi jadwal dan detail peserta pada form catatan
+                    </div> -->
+                    <form action="<?=base_url()?>kelas/nonaktif_kelas_privat" method="post">
+                        <input type="hidden" name="id_kelas">
+                        <div class="form-group">
+                            <label for="koor">Koordinator</label>
+                            <input type="text" name="koor" class="form-control form-control-sm" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="tgl_history">Tgl Nonaktif</label>
+                            <input type="date" name="tgl_history" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="submit" value="Nonaktif" class="btn btn-sm btn-danger" id="nonaktif">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- modal nonaktif -->
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -239,9 +275,9 @@
                             foreach ($kelas as $kelas) :?>
                             <tr>
                                 <td><center><?=++$no?></center></td>
-                                <!-- <td><?= $kelas['data']['status']?> -->
                                 <?php if($kelas['data']['status'] == "aktif"):?>
-                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/nonaktif" onclick="return confirm('Yakin akan menonaktifkan kelas ini?')" class="btn btn-sm btn-outline-success">aktif</a></td>
+                                  <td><a href="#modalNonaktif" data-id = "<?= $kelas['data']['id_kelas'] . "|" . $kelas['data']['nama_peserta']?>" class="btn btn-sm btn-outline-success nonaktif-kelas" data-toggle="modal">aktif</a></td>
+                                  <!-- <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/nonaktif" onclick="return confirm('Yakin akan menonaktifkan kelas ini?')" class="btn btn-sm btn-outline-success">aktif</a></td> -->
                                 <?php elseif($kelas['data']['status'] == "nonaktif") :?>
                                   <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/aktif" onclick="return confirm('Yakin akan mengaktifkan kelas ini?')" class="btn btn-sm btn-outline-secondary">nonaktif</a></td>
                                 <?php endif;?>
@@ -268,6 +304,17 @@
 <script>
     $("#kelas").addClass("active");
 
+    // nonaktifkan kelas
+    $(".nonaktif-kelas").click(function(){
+        let data = $(this).data("id");
+        data = data.split("|");
+        let id = data[0];
+        let nama_peserta = data[1];
+
+        $("input[name='id_kelas']").val(id);
+        $("input[name='koor']").val(nama_peserta);
+    })
+
     $(".modalPindahWl").click(function(){
         let data = $(this).data("id");
         data = data.split("|");
@@ -290,13 +337,14 @@
     })
 
     $(".modalKelasPrivat").click(function(){
-        
         $("#koor-edit").val()
         
         let data = $(this).data("id");
         data = data.split("|");
         let id = data[0];
         let id_peserta = data[1];
+
+        $("input[name='id_kelas']").val(id);
         
         $.ajax({
             url : "<?= base_url()?>kelas/get_peserta_aktif_by_kelas",
@@ -511,14 +559,14 @@
         var c = confirm("Yakin akan menambahkan jadwal?");
         return c;
     })
-    
-    $("#btn-add-kelas").click(function(){
-        var c = confirm("Yakin akan menambahkan kelas reguler?");
-        return c;
-    })
 
     $("#pindah-wl").click(function(){
         var c = confirm("Yakin akan memindahkan kelas ini ke waiting list?");
+        return c;
+    })
+
+    $("#nonaktif").click(function(){
+        var c = confirm("Yakin akan menonaktifkan kelas ini?")
         return c;
     })
 </script>

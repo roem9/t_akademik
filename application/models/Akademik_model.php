@@ -616,7 +616,7 @@ class Akademik_model extends CI_MODEL{
             $id = $this->input->post("id_peserta", TRUE);
 
             $data = [
-                "status" => $this->input->post("status", TRUE),
+                // "status" => $this->input->post("status", TRUE),
                 "program" => $this->input->post("program", TRUE),
                 "hari" => $this->input->post("hari", TRUE),
                 "jam" => $this->input->post("jam", TRUE),
@@ -637,7 +637,7 @@ class Akademik_model extends CI_MODEL{
             $id = $this->input->post("id_peserta", TRUE);
 
             $data = [
-                "status" => $this->input->post("status", TRUE),
+                // "status" => $this->input->post("status", TRUE),
                 "nama_peserta" => $this->input->post("nama", TRUE),
                 "no_hp" => $this->input->post("no_hp", TRUE),
                 "jk" => $this->input->post("jk", TRUE),

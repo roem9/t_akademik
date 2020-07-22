@@ -189,6 +189,8 @@
                                 <td><center><?=++$no?></center></td>
                                 <?php if($kelas['data']['status'] == "wl"):?>
                                   <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/pending" onclick="return confirm('Yakin akan mem-pending kelas ini?')" class="btn btn-sm btn-outline-success">wl</a></td>
+                                <?php elseif($kelas['data']['status'] == "konfirm"):?>
+                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/pending" onclick="return confirm('Yakin akan mem-pending kelas ini?')" class="btn btn-sm btn-outline-success">konfirm</a></td>
                                 <?php elseif($kelas['data']['status'] == "pending") :?>
                                   <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/wl" onclick="return confirm('Yakin akan memasukkan kelas ini ke waiting list?')" class="btn btn-sm btn-outline-secondary">pending</a></td>
                                 <?php endif;?>
@@ -386,11 +388,6 @@
     
     $("#btn-tambah-jadwal").click(function(){
         var c = confirm("Yakin akan menambahkan jadwal?");
-        return c;
-    })
-    
-    $("#btn-add-kelas").click(function(){
-        var c = confirm("Yakin akan menambahkan kelas reguler?");
         return c;
     })
 </script>

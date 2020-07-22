@@ -119,6 +119,10 @@
                     <i class="fa fa-info-circle text-info mr-1"></i> Menu ini untuk menonaktifkan peserta reguler
                   </div>
                   <ul class="list-group list-peserta-nonaktif"></ul>
+                  <div class="form-group mt-3">
+                    <label for="tgl_history">Tgl Nonaktif</label>
+                    <input type="date" name="tgl_history" id="tgl_history" class="form-control form-control-sm" required>
+                  </div>
                   <div class="d-flex justify-content-end">
                     <input type="submit" value="Nonaktif" class="btn btn-sm btn-danger mt-3" id="btn-nonaktif">
                   </div>
@@ -371,10 +375,4 @@
         var c = confirm("Yakin akan memindahkan peserta ke waiting list?")
         return c;
     })
-    
-    $("#btn-add-kelas").click(function(){
-        var c = confirm("Yakin akan menambahkan kelas reguler?");
-        return c;
-    })
-
 </script>

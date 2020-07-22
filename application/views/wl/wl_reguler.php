@@ -262,9 +262,4 @@
         var c = confirm("Yakin akan memindahkan peserta ke waiting list?")
         return c;
     })
-    
-    $("#btn-add-kelas").click(function(){
-        var c = confirm("Yakin akan menambahkan kelas reguler?");
-        return c;
-    })
 </script>

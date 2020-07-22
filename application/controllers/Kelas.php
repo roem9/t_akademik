@@ -203,6 +203,32 @@ class Kelas extends CI_CONTROLLER{
             if($id_peserta){
                 foreach ($id_peserta as $id_peserta) {
                     $this->Akademik_model->nonaktif_peserta($id_peserta);
+
+                    // input history
+                    // tampilkan data peserta
+                    $peserta = $this->Main_model->get_one("peserta", ["id_peserta" => $id_peserta]);
+                    if($peserta['tipe_peserta'] == "reguler"){
+                        // tampilkan kelas
+                        $kelas = $this->Main_model->get_one("kelas", ["id_kelas" => $peserta['id_kelas']]);
+                        // tampilkan jadwal
+                        $jadwal = $this->Main_model->get_one("jadwal", ["id_kelas" => $kelas['id_kelas'], "status" => "aktif"]);
+                        // tampilkan kpq
+                        $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+                        $data = [
+                            "id_peserta" => $id_peserta,
+                            "nama_kpq" => $kpq['nama_kpq'],
+                            "hari" => $jadwal['hari'],
+                            "jam" => $jadwal['jam'],
+                            "tipe" => $kelas['tipe_kelas'],
+                            "program" => $kelas['program'],
+                            "nama_peserta" => $peserta['nama_peserta'],
+                            "tempat" => $jadwal['tempat'],
+                            "status" => "nonaktif",
+                            "tgl_history" => $this->input->post("tgl_history", TRUE)
+                        ];
+    
+                        $this->Main_model->add_data("history_peserta", $data);
+                    }
                 }
                 $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             } else {
@@ -225,10 +251,31 @@ class Kelas extends CI_CONTROLLER{
         }
 
         public function nonaktif_jadwal(){
+            $id_kelas = $this->input->post("id_kelas", TRUE);
+            $kelas = $this->Main_model->get_one("kelas", ["id_kelas" => $id_kelas]);
+            $id_koor = $this->Main_model->get_one("kelas_koor", ["id_kelas" => $id_kelas]);
+            $peserta = $this->Main_model->get_one("peserta", ["id_peserta" => $id_koor['id_peserta']]);
+            $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+            
             $id_jadwal = $this->input->post("id_jadwal", TRUE);
             if($id_jadwal){
                 foreach ($id_jadwal as $id_jadwal) {
                     $this->Akademik_model->nonaktif_jadwal($id_jadwal);
+                    $jadwal = $this->Main_model->get_one("jadwal", ["id_jadwal" => $id_jadwal]);
+                    // input ke history
+                        $data = [
+                            "id_kelas" => $id_kelas,
+                            "nama_kpq" => $kpq['nama_kpq'],
+                            "hari" => $jadwal['hari'],
+                            "jam" => $jadwal['jam'],
+                            "tipe" => $kelas['tipe_kelas'],
+                            "program" => $kelas['program'],
+                            "koordinator" => $peserta['nama_peserta'],
+                            "alamat" => $jadwal['tempat'],
+                            "status" => "nonaktif",
+                            "tgl_history" => $this->input->post("tgl_history", TRUE)
+                        ];
+                        $this->Main_model->add_data("history_kelas", $data);
                 }
                 $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             } else {
@@ -241,7 +288,6 @@ class Kelas extends CI_CONTROLLER{
             $data = [
                 "status" => $status
             ];
-
             $result = $this->Main_model->edit_data("kelas", ["id_kelas" => $id_kelas], $data);
             if($result){
                 if($status == "aktif")
@@ -251,6 +297,36 @@ class Kelas extends CI_CONTROLLER{
             } else {
                 $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal metubah status kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        public function nonaktif_kelas_privat(){
+            $id_kelas = $this->input->post("id_kelas", TRUE);
+            $kelas = $this->Main_model->get_one("kelas", ["id_kelas" => $id_kelas]);
+            $id_koor = $this->Main_model->get_one("kelas_koor", ["id_kelas" => $id_kelas]);
+            $jadwal = $this->Main_model->get_all("jadwal", ["id_kelas" => $id_kelas, "status" => "aktif"]);
+            $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+
+            foreach ($jadwal as $jadwal) {
+                $data = [
+                    "id_kelas" => $id_kelas,
+                    "nama_kpq" => $kpq['nama_kpq'],
+                    "hari" => $jadwal['hari'],
+                    "jam" => $jadwal['jam'],
+                    "tipe" => $kelas['tipe_kelas'],
+                    "program" => $kelas['program'],
+                    "koordinator" => $this->input->post("koor", TRUE),
+                    "alamat" => $jadwal['tempat'],
+                    "status" => "nonaktif",
+                    "tgl_history" => $this->input->post("tgl_history", TRUE)
+                ];
+
+                $this->Main_model->add_data("history_kelas", $data);
+            }
+
+            $this->Main_model->edit_data("kelas", ["id_kelas" => $id_kelas], ["status" => "nonaktif"]);
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menonaktifkan kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
@@ -286,7 +362,7 @@ class Kelas extends CI_CONTROLLER{
             
             $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menambahkan kelas reguler<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             
-            redirect('kelas/reguler');
+            redirect('kelas/reguler/aktif');
         }
     // add data
 }
