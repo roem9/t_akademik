@@ -77,9 +77,12 @@ class Wl extends CI_CONTROLLER{
         foreach ($kelas as $i => $kelas) {
             $id_peserta = $this->Main_model->get_one("kelas_koor", ["id_kelas" => $kelas['id_kelas']]);
             $peserta = $this->Main_model->get_one("peserta", ["id_peserta" => $id_peserta['id_peserta']]);
+            $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+
             $data['kelas'][$i]['data'] = $kelas;
             $data['kelas'][$i]['data']['nama_peserta'] = $peserta['nama_peserta'];
             $data['kelas'][$i]['data']['no_hp'] = $peserta['no_hp'];
+            $data['kelas'][$i]['data']['nama_kpq'] = $kpq['nama_kpq'];
             $data['kelas'][$i]['peserta'] = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($kelas['id_kelas']));
         }
         
@@ -112,6 +115,19 @@ class Wl extends CI_CONTROLLER{
     // add
 
     // edit
+        public function edit_status_privat(){
+            $id_kelas = $this->input->post("id_kelas");
+            $data = [
+                "status" => $this->input->post("status"),
+                "nip" => NULL
+            ];
+            
+            $result = $this->Main_model->edit_data("kelas", ["id_kelas" => $id_kelas], $data);
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil mengubah status kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
         public function konfirm_wl($id_kelas){
             $jadwal = COUNT($this->Akademik_model->get_data_jadwal_aktif_by_kelas($id_kelas));
 

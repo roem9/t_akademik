@@ -262,20 +262,23 @@ class Kelas extends CI_CONTROLLER{
                 foreach ($id_jadwal as $id_jadwal) {
                     $this->Akademik_model->nonaktif_jadwal($id_jadwal);
                     $jadwal = $this->Main_model->get_one("jadwal", ["id_jadwal" => $id_jadwal]);
-                    // input ke history
-                        $data = [
-                            "id_kelas" => $id_kelas,
-                            "nama_kpq" => $kpq['nama_kpq'],
-                            "hari" => $jadwal['hari'],
-                            "jam" => $jadwal['jam'],
-                            "tipe" => $kelas['tipe_kelas'],
-                            "program" => $kelas['program'],
-                            "koordinator" => $peserta['nama_peserta'],
-                            "alamat" => $jadwal['tempat'],
-                            "status" => "nonaktif",
-                            "tgl_history" => $this->input->post("tgl_history", TRUE)
-                        ];
-                        $this->Main_model->add_data("history_kelas", $data);
+
+                    if($id_kelas){
+                        // input ke history
+                            $data = [
+                                "id_kelas" => $id_kelas,
+                                "nama_kpq" => $kpq['nama_kpq'],
+                                "hari" => $jadwal['hari'],
+                                "jam" => $jadwal['jam'],
+                                "tipe" => $kelas['tipe_kelas'],
+                                "program" => $kelas['program'],
+                                "koordinator" => $peserta['nama_peserta'],
+                                "alamat" => $jadwal['tempat'],
+                                "status" => "nonaktif",
+                                "tgl_history" => $this->input->post("tgl_history", TRUE)
+                            ];
+                            $this->Main_model->add_data("history_kelas", $data);
+                    }
                 }
                 $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             } else {

@@ -29,34 +29,14 @@
                     <div class="card-body cus-font">
                     <form action="<?= base_url()?>kelas/edit_kelas_privat" method="post" id="form-1">
                         <input type="hidden" name="id" id="id-edit">
-                        <!-- <div class="form-group">
-                            <label for="status-edit">Status</label>
-                            <select name="status" id="status-edit" class="form-control form-control-sm" required>
-                                <option value="">Pilih Status</option>
-                                <option value="aktif">Aktif</option>
-                                <option value="nonaktif">Nonaktif</option>
-                                <option value="wl">WL</option>
-                                <option value="konfirm">Konfirm</option>
-                                <option value="pending">Pending</option>
+                        <div class="form-group">
+                            <label for="pengajar-edit">Tipe Pengajar</label>
+                            <select name="pengajar" id="pengajar-edit" class="form-control form-control-sm" required>
+                                <option value="">Pilih Tipe Pengajar</option>
+                                <option value="Pria">Ikhwan</option>
+                                <option value="Wanita">Akhwat</option>
+                                <option value="Pria&Wanita">Ikhwan & Akhwat</option>
                             </select>
-                        </div> -->
-                        <div class="form-group">
-                        <label for="nip-edit">Pengajar</label>
-                        <select name="nip" id="nip-edit" class="form-control form-control-sm">
-                            <option value="">Pilih Pengajar</option>
-                            <?php foreach ($kpq as $kpq) :?>
-                            <option value="<?= $kpq['nip']?>"><?= $kpq['nama_kpq']?></option>
-                            <?php endforeach;?>
-                        </select>
-                        </div>
-                        <div class="form-group">
-                        <label for="pengajar-edit">Tipe Pengajar</label>
-                        <select name="pengajar" id="pengajar-edit" class="form-control form-control-sm" required>
-                            <option value="">Pilih Tipe Pengajar</option>
-                            <option value="Pria">Ikhwan</option>
-                            <option value="Wanita">Akhwat</option>
-                            <option value="Pria&Wanita">Ikhwan & Akhwat</option>
-                        </select>
                         </div>
                         <div class="form-group">
                         <label for="program-edit">Program</label>
@@ -149,6 +129,50 @@
     </div>
 <!-- modal wl kelas pv -->
 
+<!-- modal wl kelas pv -->
+    <div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalStatusTitle">Ubah Status Kelas Privat</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body cus-font">
+                            <form action="<?= base_url()?>wl/edit_status_privat" method="post" id="form-1">
+                                <input type="hidden" name="id_kelas">
+                                <div class="form-group">
+                                    <label for="koor">Koordinator</label>
+                                    <input type="text" name="koor" class="form-control form-control-sm" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select name="status" class="form-control form-control-sm" required>
+                                        <option value="">Pilih Status</option>
+                                        <?php if($tabs == "pending"):?>
+                                            <option value="nonaktif">Nonaktif</option>
+                                            <option value="wl">Waiting List</option>
+                                        <?php else :?>
+                                            <option value="nonaktif">Nonaktif</option>
+                                            <option value="pending">Pending</option>
+                                        <?php endif;?>
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <input type="submit" value="Ubah Status" class="btn btn-sm btn-success" id="ubah-status">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- modal wl kelas pv -->
+
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800 mt-3"><?= $title?></h1>
@@ -188,13 +212,12 @@
                             <tr>
                                 <td><center><?=++$no?></center></td>
                                 <?php if($kelas['data']['status'] == "wl"):?>
-                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/pending" onclick="return confirm('Yakin akan mem-pending kelas ini?')" class="btn btn-sm btn-outline-success">wl</a></td>
+                                  <td><a href="#modalStatus" data-toggle='modal' data-id="<?= $kelas['data']['id_kelas'] . '|' . $kelas['data']['nama_peserta']?>" class="modalStatus btn btn-sm btn-outline-success">wl</a></td>
                                 <?php elseif($kelas['data']['status'] == "konfirm"):?>
-                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/pending" onclick="return confirm('Yakin akan mem-pending kelas ini?')" class="btn btn-sm btn-outline-success">konfirm</a></td>
+                                  <td><a href="#modalStatus" data-toggle='modal' data-id="<?= $kelas['data']['id_kelas'] . '|' . $kelas['data']['nama_peserta']?>" class="modalStatus btn btn-sm btn-outline-primary">konfirm</a></td>
                                 <?php elseif($kelas['data']['status'] == "pending") :?>
-                                  <td><a href="<?= base_url()?>kelas/editstatus/<?= $kelas['data']['id_kelas']?>/wl" onclick="return confirm('Yakin akan memasukkan kelas ini ke waiting list?')" class="btn btn-sm btn-outline-secondary">pending</a></td>
+                                  <td><a href="#modalStatus" data-toggle='modal' data-id="<?= $kelas['data']['id_kelas'] . '|' . $kelas['data']['nama_peserta']?>" class="modalStatus btn btn-sm btn-outline-secondary">pending</a></td>
                                 <?php endif;?>
-                                <!-- <td><?= $kelas['data']['status']?> -->
                                 <td><?= $kelas['data']['tipe_kelas']?></td>
                                 <td><?= $kelas['data']['nama_peserta']?></td>
                                 <td><?= $kelas['data']['no_hp']?>
@@ -228,6 +251,14 @@
 <script>
     $("#wl").addClass("active");
     $("#tempat-modal").remove();
+
+    $(".modalStatus").click(function(){
+        let data = $(this).data("id");
+        data = data.split("|");
+
+        $("input[name='id_kelas']").val(data[0])
+        $("input[name='koor']").val(data[1])
+    })
 
     $(".modalKelasPrivat").click(function(){
         
@@ -388,6 +419,11 @@
     
     $("#btn-tambah-jadwal").click(function(){
         var c = confirm("Yakin akan menambahkan jadwal?");
+        return c;
+    })
+
+    $("#ubah-status").click(function(){
+        var c = confirm("Yakin akan mengubah status kelas?");
         return c;
     })
 </script>
