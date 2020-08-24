@@ -32,6 +32,7 @@
                     <option value="Rekap Pengajaran">Rekap Pengajaran</option>
                     <option value="Rekap KBM">Rekap KBM</option>
                     <option value="Kelas Nonaktif">Kelas Pv Nonaktif</option>
+                    <option value="Jadwal Nonaktif">Jadwal Pv Nonaktif</option>
                     <option value="Peserta Nonaktif">Peserta Reguler Nonaktif</option>
                 </select>
             </div>

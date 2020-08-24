@@ -80,6 +80,26 @@ class Laporan extends CI_CONTROLLER{
         $this->load->view("templates/footer", $data);
     }
 
+    public function jadwalNonaktif(){
+        $data['title'] = "Laporan Jadwal Nonaktif";
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
+        $data['history'] = $this->Main_model->get_all("history_jadwal","", "tgl_history", "DESC");
+
+        
+        // ini_set('xdebug.var_display_max_depth', '10');
+        // ini_set('xdebug.var_display_max_children', '256');
+        // ini_set('xdebug.var_display_max_data', '1024');
+
+        // var_dump($data['history']);
+        
+        $this->load->view("templates/header", $data);
+        $this->load->view("templates/sidebar");
+        $this->load->view("laporan/jadwal-nonaktif", $data);
+        $this->load->view("templates/footer", $data);
+    }
+
     public function kelasNonaktif(){
         $data['title'] = "Laporan Kelas Nonaktif";
         $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
@@ -391,6 +411,23 @@ class Laporan extends CI_CONTROLLER{
             // var_dump($data);
 
             $this->load->view("laporan/rekap-kelas-nonaktif", $data);
+        } else if($laporan == "Jadwal Nonaktif"){
+            $filename = "Jadwal PV Nonaktif {$bulan}-{$tahun}";
+            
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+            
+            $month = ["1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
+            $data['title'] = "Periode {$month[$bulan]} {$tahun}";
+
+            $data['laporan'] = $this->Main_model->get_all("history_jadwal", "MONTH(tgl_history) = $bulan AND YEAR(tgl_history) = $tahun", "nama_kpq", "ASC");
+            
+            // ini_set('xdebug.var_display_max_depth', '10');
+            // ini_set('xdebug.var_display_max_children', '256');
+            // ini_set('xdebug.var_display_max_data', '1024');
+            // var_dump($data);
+
+            $this->load->view("laporan/rekap-jadwal-nonaktif", $data);
         } else if($laporan == "Peserta Nonaktif"){
             $filename = "Peserta Reguler Nonaktif {$bulan}-{$tahun}";
             
@@ -445,6 +482,12 @@ class Laporan extends CI_CONTROLLER{
 
     public function get_history(){
         $id = $this->input->post("id");
+        $data = $this->Main_model->get_one("history_jadwal", ["id" => $id]);
+        echo json_encode($data);
+    }
+    
+    public function get_history_kelas(){
+        $id = $this->input->post("id");
         $data = $this->Main_model->get_one("history_kelas", ["id" => $id]);
         echo json_encode($data);
     }
@@ -457,6 +500,23 @@ class Laporan extends CI_CONTROLLER{
 
     // edit
     public function edit_history(){
+        $id = $this->input->post("id");
+        $data = [
+            "tgl_history" => $this->input->post("tgl_history")
+        ];
+
+        // hapus / edit
+        if(isset($_POST['hapus'])){
+            $this->Main_model->delete_data("history_jadwal", ["id" => $id]);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menghapus data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        } else if(isset($_POST['edit'])){
+            $this->Main_model->edit_data("history_jadwal", ["id" => $id], $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengubah data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function edit_history_kelas(){
         $id = $this->input->post("id");
         $data = [
             "tgl_history" => $this->input->post("tgl_history")

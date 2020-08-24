@@ -14,10 +14,10 @@
 
 <table border=1>
     <tr>
-        <th colspan=7><center>Rekapitulasi Kelas Privat Nonaktif TAR-Q</center></th>
+        <th colspan=9><center>Rekapitulasi Jadwal Privat Nonaktif TAR-Q</center></th>
     </tr>
     <tr>
-        <th colspan=7><center><?= $title?></center></th>
+        <th colspan=9><center><?= $title?></center></th>
     </tr>
     <!-- <tr>
         <th colspan=11></th>
@@ -26,6 +26,8 @@
         <th>No</th>
         <th>Tgl. Off</th>
         <th>Nama Pengajar</th>
+        <th>Hari</th>
+        <th>Jam</th>
         <th>Tipe</th>
         <th>Program</th>
         <th>Koordinator</th>
@@ -39,6 +41,8 @@
                     <td><?= ++$no?></td>
                     <td><?= $laporan['tgl_history']?></td>
                     <td><?= $laporan['nama_kpq']?></td>
+                    <td><?= $laporan['hari']?></td>
+                    <td><?= $laporan['jam']?></td>
                     <td><?= tipe($laporan['tipe'])?></td>
                     <td><?= $laporan['program']?></td>
                     <td><?= $laporan['koordinator']?></td>

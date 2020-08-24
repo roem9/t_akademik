@@ -97,6 +97,42 @@ class Kelas extends CI_CONTROLLER{
         $this->load->view('templates/footer');
     }
 
+    public function kbm($tipe){
+        if($tipe == "pvkhusus"){
+            $data['title'] = "KBM Pv Khusus";
+            $tipe = "pv khusus";
+        } else if($tipe == "pvluar"){
+            $data['title'] = "KBM Pv Luar";
+            $tipe = "pv luar";
+        } else if($tipe == "reguler"){
+            $data['title'] = "KBM Reguler";
+            $tipe = "reguler";
+        }
+        
+        $jadwal = $this->Main_model->get_join_two("*, a.tempat as tempat", "jadwal as a", "kelas as b", ["a.id_kelas = b.id_kelas"], ["a.status" => "aktif", "tipe_kelas" => $tipe]);
+        foreach ($jadwal as $i => $jadwal) {
+            $data['kbm'][$i]['kbm'] = $this->Main_model->get_all("kbm", ["id_jadwal" => $jadwal['id_jadwal'], "MONTH(tgl)" => date('m'), "YEAR(tgl)" => date('Y')]);
+            $data['kbm'][$i]['jadwal'] = $jadwal;
+            $data['kbm'][$i]['kpq'] = $this->Main_model->get_one("kpq", ["nip" => $jadwal['nip']]);
+            $id_peserta = $this->Main_model->get_one("kelas_koor", ["id_kelas" => $jadwal['id_kelas']]);
+            if($id_peserta){
+                $peserta = $this->Main_model->get_one("peserta", ["id_peserta" => $id_peserta['id_peserta']]);
+                $data['kbm'][$i]['koor'] = $peserta['nama_peserta'];
+            } else {
+                $data['kbm'][$i]['koor'] = "LKP TAR-Q";
+            }
+        }
+
+        $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
+        $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
+        $data['program'] = $this->Akademik_model->get_all_program();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('kelas/kbm', $data);
+        $this->load->view('templates/footer');
+    }
+
     // get data
         public function get_data_kelas_reguler(){
             $data = $this->Akademik_model->get_data_kelas_reguler();
@@ -277,7 +313,7 @@ class Kelas extends CI_CONTROLLER{
                                 "status" => "nonaktif",
                                 "tgl_history" => $this->input->post("tgl_history", TRUE)
                             ];
-                            $this->Main_model->add_data("history_kelas", $data);
+                            $this->Main_model->add_data("history_jadwal", $data);
                     }
                 }
                 $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan jadwal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -307,25 +343,20 @@ class Kelas extends CI_CONTROLLER{
             $id_kelas = $this->input->post("id_kelas", TRUE);
             $kelas = $this->Main_model->get_one("kelas", ["id_kelas" => $id_kelas]);
             $id_koor = $this->Main_model->get_one("kelas_koor", ["id_kelas" => $id_kelas]);
-            $jadwal = $this->Main_model->get_all("jadwal", ["id_kelas" => $id_kelas, "status" => "aktif"]);
             $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
 
-            foreach ($jadwal as $jadwal) {
-                $data = [
-                    "id_kelas" => $id_kelas,
-                    "nama_kpq" => $kpq['nama_kpq'],
-                    "hari" => $jadwal['hari'],
-                    "jam" => $jadwal['jam'],
-                    "tipe" => $kelas['tipe_kelas'],
-                    "program" => $kelas['program'],
-                    "koordinator" => $this->input->post("koor", TRUE),
-                    "alamat" => $jadwal['tempat'],
-                    "status" => "nonaktif",
-                    "tgl_history" => $this->input->post("tgl_history", TRUE)
-                ];
+            $data = [
+                "id_kelas" => $id_kelas,
+                "nama_kpq" => $kpq['nama_kpq'],
+                "tipe" => $kelas['tipe_kelas'],
+                "program" => $kelas['program'],
+                "koordinator" => $this->input->post("koor", TRUE),
+                "alamat" => $kelas['tempat'],
+                "status" => "nonaktif",
+                "tgl_history" => $this->input->post("tgl_history", TRUE)
+            ];
 
-                $this->Main_model->add_data("history_kelas", $data);
-            }
+            $this->Main_model->add_data("history_kelas", $data);
 
             $this->Main_model->edit_data("kelas", ["id_kelas" => $id_kelas], ["status" => "nonaktif"]);
 
@@ -367,5 +398,28 @@ class Kelas extends CI_CONTROLLER{
             
             redirect('kelas/reguler/aktif');
         }
+
+        public function add_badal(){
+            $tgl = $this->input->post("tgl");
+            $id = $this->session->userdata("id");
+            $id_jadwal = $this->session->userdata("id_jadwal");
+            $data = $this->Main_model->get_one("kbm", ["tgl" => $tgl, "nip" => $id, "id_jadwal" => $id_jadwal]);
+            if($data){
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal menginputkan badal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            } else {
+                $result = $this->Akademik_model->add_badal();
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menginputkan badal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            }
+            redirect($_SERVER['HTTP_REFERER']);
+        }
     // add data
+
+    
+    public function konfirm_badal($id){
+        $this->Akademik_model->konfirm_badal($id);
+        
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengkonfirmasi badal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+        
+        redirect($_SERVER['HTTP_REFERER']);
+    }
 }

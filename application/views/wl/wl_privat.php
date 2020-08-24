@@ -223,7 +223,15 @@
                                 <td><?= $kelas['data']['no_hp']?>
                                 <td><?= $kelas['data']['program']?>
                                 <?php if($tabs != "pending"):?>
-                                    <td><?= $kelas['data']['nama_kpq']?>
+                                    <td>
+                                        <?php if($kelas['data']['nama_kpq'] != NULL):?>
+                                            <a class="btn btn-outline-success btn-sm" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php if($kelas['data']['hp_kpq'] != NULL || $kelas['data']['hp_kpq'] != ""){echo $kelas['data']['hp_kpq'];}else{echo "no hp kosong";}?>">
+                                                <?= $kelas['data']['nama_kpq']?>
+                                            </a>
+                                        <?php else :?>
+                                            <center>-</center>
+                                        <?php endif;?>
+                                    </td>
                                 <?php endif;?>
                                 <td><center><?= $kelas['peserta']?></center></td>
                                 <td><center><a href="#modalKelasPrivat" class="btn btn-info btn-sm modalKelasPrivat" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>">detail</a></center></td>
@@ -425,5 +433,9 @@
     $("#ubah-status").click(function(){
         var c = confirm("Yakin akan mengubah status kelas?");
         return c;
+    })
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
     })
 </script>

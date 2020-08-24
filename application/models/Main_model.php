@@ -6,6 +6,14 @@ class Main_model extends CI_MODEL{
             return $this->db->insert_id();
         }
 
+        public function get_join_two($select, $a, $b, $con, $where){
+            $this->db->select($select);
+            $this->db->from("jadwal as a");
+            $this->db->join("kelas as b", "a.id_kelas = b.id_kelas");
+            $this->db->where($where);
+            return $this->db->get()->result_array();
+        }
+
         public function get_one($table, $where){
             $this->db->from($table);
             $this->db->where($where);

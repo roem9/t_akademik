@@ -16,11 +16,19 @@
                       <!-- <div class="alert alert-warning">
                           <i class="fa fa-exclamation-circle text-warning mr-1"></i> <strong>Perhatian</strong>! ketika kelas privat dipindahkan ke waiting list maka jadwal dan pengajar dari kelas akan dihapus. Harap mengisi jadwal dan detail peserta pada form catatan
                       </div> -->
-                      <form action="<?=base_url()?>Laporan/edit_history_kelas" method="post">
+                      <form action="<?=base_url()?>Laporan/edit_history" method="post">
                           <input type="hidden" name="id">
                           <div class="form-group">
                               <label for="koor">Koordinator</label>
                               <input type="text" name="koor" class="form-control form-control-sm" readonly>
+                          </div>
+                          <div class="form-group">
+                              <label for="hari">Hari</label>
+                              <input type="text" name="hari" class="form-control form-control-sm" readonly>
+                          </div>
+                          <div class="form-group">
+                              <label for="jam">Jam</label>
+                              <input type="text" name="jam" class="form-control form-control-sm" readonly>
                           </div>
                           <div class="form-group">
                               <label for="tgl_history">Tgl Nonaktif</label>
@@ -60,7 +68,7 @@
           <?php endif; ?>
 
           <!-- DataTales Example -->
-          <div class="card shadow mb-4" style="max-width: 900px">
+          <div class="card shadow mb-4">
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
@@ -69,8 +77,10 @@
                     <th style="width: 10%">Tipe</th>
                     <th>Koordinator</th>
                     <th>Pengajar</th>
+                    <th style="width: 7%">Hari</th>
+                    <th style="width: 10%">Jam</th>
                     <th>Alamat</th> 
-                    <th style="width: 10%">Tgl Off</th>
+                    <th style="width: 7%">Tgl Off</th>
                   </thead>
                   <tbody>
                     <?php 
@@ -81,6 +91,8 @@
                         <td><?= $history['tipe']?></td>
                         <td><?= $history['koordinator']?></td>
                         <td><?= $history['nama_kpq']?></td>
+                        <td><?= $history['hari']?></td>
+                        <td><?= $history['jam']?></td>
                         <td><?= $history['alamat']?></td>
                         <td><a href="#modalEditHistory" data-toggle="modal" class="modal-edit btn btn-sm btn-outline-info" data-id="<?= $history['id']?>"><?= date("d-m-Y", strtotime($history['tgl_history']))?></a></td>
                       </tr>
@@ -104,7 +116,7 @@
       var id = $(this).data("id");
       
       $.ajax({
-        url : "<?= base_url()?>laporan/get_history_kelas",
+        url : "<?= base_url()?>laporan/get_history",
         method : "POST",
         data : {id: id},
         async : true,
@@ -112,6 +124,8 @@
         success : function(data){
           $("input[name='id']").val(data.id);
           $("input[name='koor']").val(data.koordinator);
+          $("input[name='hari']").val(data.hari);
+          $("input[name='jam']").val(data.jam);
           $("input[name='tgl_history']").val(data.tgl_history);
         }
       })

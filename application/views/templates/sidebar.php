@@ -59,6 +59,21 @@
         </div>
       </li>
       
+      <li class="nav-item" id="kbm">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dropseven" aria-expanded="true" aria-controls="dropseven">
+          <i class="fas fa-fw fa-clock"></i>
+          <span>KBM</span>
+        </a>
+        <div id="dropseven" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-primary py-2 collapse-inner rounded">
+            <h6 class="collapse-header text-light">KBM</h6>
+            <a class="collapse-item text-light d-flex justify-content-between" href="<?= base_url()?>kelas/kbm/reguler">Reguler</a>
+            <a class="collapse-item text-light d-flex justify-content-between" href="<?= base_url()?>kelas/kbm/pvkhusus">PV Khusus</a>
+            <a class="collapse-item text-light d-flex justify-content-between" href="<?= base_url()?>kelas/kbm/pvluar">PV Luar</a>
+          </div>
+        </div>
+      </li>
+
       <li class="nav-item" id="badal">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dropsix" aria-expanded="true" aria-controls="dropsix">
           <i class="fas fa-fw fa-list"></i>
@@ -99,6 +114,7 @@
             <h6 class="collapse-header text-light">Laporan</h6>
             <a class="collapse-item text-light" href="<?= base_url()?>laporan/rekap">Rekap KBM</a>
             <a class="collapse-item text-light" href="<?= base_url()?>laporan/kelasnonaktif">Kelas Nonaktif</a>
+            <a class="collapse-item text-light" href="<?= base_url()?>laporan/jadwalnonaktif">Jadwal Nonaktif</a>
             <a class="collapse-item text-light" href="<?= base_url()?>laporan/pesertanonaktif">Peserta Nonaktif</a>
             <a class="collapse-item text-light" href="<?= base_url()?>laporan/">Download Laporan</a>
           </div>

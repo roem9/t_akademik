@@ -1,5 +1,57 @@
 <?php
 class Akademik_model extends CI_MODEL{
+    // get group by
+    public function add_badal(){
+        // kbm terakhir
+        $this->db->select("id_kbm");
+        $this->db->from("kbm");
+        $this->db->order_by("id_kbm", "desc");
+        $id = $this->db->get()->row_array();
+        $id = $id['id_kbm'] + 1;
+
+        $jum_peserta = COUNT($this->get_peserta_aktif($this->input->post("id_kelas")));
+
+        $hari = array(
+            'Sunday' => 'Ahad',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu'
+            );
+
+        $data = [
+            "id_kbm" => $id,
+            "tgl" => $this->input->post("tgl"),
+            "jam" => $this->input->post("waktu"),
+            "hari" => $hari[date('l', strtotime($this->input->post("tgl")))],
+            "keterangan" => "badal",
+            "id_kelas" => $this->input->post("id_kelas"),
+            "nip" => $this->input->post("nip_kpq"),
+            "ot" => "0",
+            "jum_peserta" => $jum_peserta,
+            "id_jadwal" => $this->input->post("id_jadwal"),
+            "program_kbm" => $this->input->post("program"),
+            "peserta" => $this->input->post("koor")
+        ];
+
+        $this->db->insert("kbm", $data);
+
+        $catatan = "Catatan : <br>" . $this->input->post("catatan") . "<br><br> Tempat : <br>" . $this->input->post("tempat");
+
+        $data = [
+            "id_kbm" => $id,
+            "catatan" => $catatan,
+            "status" => "konfirm",
+            "nip_badal" => $this->input->post("nip"),
+            "rekap" => 0
+        ];
+
+        $this->db->insert("kbm_badal", $data);
+    }
+    // get group by
+
     // get by
         public function get_kpq_by_nip($nip){
             $this->db->from("kpq");
@@ -29,7 +81,6 @@ class Akademik_model extends CI_MODEL{
             $this->db->group_by("waktu");
             return $this->db->get()->result_array();
         }
-
     // get some
     
     // get all
@@ -722,6 +773,13 @@ class Akademik_model extends CI_MODEL{
 
             $this->db->where("id_kelas", $id_kelas);
             $this->db->update("kelas", ["status" => "wl", "nip" => null]);
+        }
+
+        public function get_peserta_aktif($id){
+            $this->db->from("peserta");
+            $this->db->where("id_kelas", $id);
+            $this->db->where("status", "aktif");
+            return $this->db->get()->result_array();
         }
 
     // edit data
