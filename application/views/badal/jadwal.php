@@ -93,6 +93,7 @@
                     html += '<ul class="list-group mb-3">'+
                                 '<li class="list-group-item list-group-item-warning d-flex justify-content-between"><span>'+data[i].jam+'</span>'+data[i].peserta+' <b>'+data[i].program_kbm+'</b></li>'+
                                 '<li class="list-group-item d-flex justify-content-between"><span>'+data[i].kpq+'</span><span><i class="fa fa-long-arrow-alt-right"></i></span><span>'+data[i].kpq_badal+'</span></li>'+
+                                '<li class="list-group-item">Tempat : '+data[i].tempat+'</li>'+
                             '</ul>';
                 }
                 

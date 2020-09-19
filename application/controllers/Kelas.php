@@ -109,7 +109,7 @@ class Kelas extends CI_CONTROLLER{
             $tipe = "reguler";
         }
         
-        $jadwal = $this->Main_model->get_join_two("*, a.tempat as tempat", "jadwal as a", "kelas as b", ["a.id_kelas = b.id_kelas"], ["a.status" => "aktif", "tipe_kelas" => $tipe]);
+        $jadwal = $this->Main_model->get_join_two("*, a.tempat as tempat", "jadwal as a", "kelas as b", ["a.id_kelas = b.id_kelas"], ["a.status" => "aktif", "tipe_kelas" => $tipe, "b.status" => "aktif"]);
         foreach ($jadwal as $i => $jadwal) {
             $data['kbm'][$i]['kbm'] = $this->Main_model->get_all("kbm", ["id_jadwal" => $jadwal['id_jadwal'], "MONTH(tgl)" => date('m'), "YEAR(tgl)" => date('Y')]);
             $data['kbm'][$i]['jadwal'] = $jadwal;

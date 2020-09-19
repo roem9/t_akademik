@@ -161,4 +161,8 @@
             $("#nip-kpq").val(nip);
         })
     // modal badal
+    $("#btn-badal").click(function(){
+        var c = confirm("Yakin akan mengajukan badal?");
+        return c;
+    })
 </script>
