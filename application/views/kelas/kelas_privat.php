@@ -25,7 +25,10 @@
                             <a href="#" class='nav-link' id="btn-form-4"><i class="fas fa-clock"></i></a>
                             </li>
                             <li class="nav-item">
-                            <a href="#" class='nav-link' id="btn-form-5">tambah jadwal</a>
+                            <a href="#" class='nav-link' id="btn-form-5"><i class="fas fa-exchange-alt"></i></a>
+                            </li>
+                            <li class="nav-item">
+                            <a href="#" class='nav-link' id="btn-form-6">tambah jadwal</a>
                             </li>
                         </ul>
                     </div>
@@ -111,7 +114,28 @@
                         </div>
                     </form>
 
-                    <form action="<?= base_url()?>kelas/add_jadwal" method="post" id="form-5">
+                    <form action="<?= base_url()?>kelas/pindah_peserta_privat" method="post" id="form-5">
+                        <div class="alert alert-info"><i class="fa fa-info-circle mr-1 text-info"></i> menu ini untuk memindahkan peserta ke kelas lain</div>
+                        <ul class="list-group list-peserta-pindah"></ul>
+                        <div class="form-group mt-1">
+                            <label for="tipe_kelas">Tipe Kelas</label>
+                            <select name="tipe_kelas" id="tipe_kelas" class="form-control form-control-sm">
+                                <option value="">Pilih Tipe Kelas</option>
+                                <option value="pv khusus">Privat Khusus</option>
+                                <option value="pv luar">Privat Luar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_kelas_pindah">Koordinator</label>
+                            <select name="id_kelas_pindah" id="id_kelas_pindah" class="form-control form-control-sm">
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <input type="submit" value="Pindah" class="btn btn-sm btn-primary" id="btn-pindah-peserta">
+                        </div>
+                    </form>
+
+                    <form action="<?= base_url()?>kelas/add_jadwal" method="post" id="form-6">
                         <input type="hidden" name="id" id="id-add">
                         <div class="form-group">
                         <label for="hari">Hari</label>
@@ -247,7 +271,7 @@
     <!-- berhasil memindahkan peserta -->
     <?php if( $this->session->flashdata('pesan') ) : ?>
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <?= $this->session->flashdata('pesan');?>
                 </div>
         </div>
@@ -380,6 +404,18 @@
                 }
 
                 $(".list-peserta-aktif").html(html2);
+                
+                html2 = "";
+                for (let i = 0; i < data.length; i++) {
+                    html2 += '<li class="list-group-item"><div class="form-check">'+
+                                '<input class="form-check-input" name="id_peserta['+i+']" type="checkbox" value="'+data[i].id_peserta+'" id="p'+i+'">'+
+                                '<label class="form-check-label" for="p'+i+'">'+
+                                    data[i].nama_peserta+
+                                '</label>'+
+                            '</div></li>';
+                }
+
+                $(".list-peserta-pindah").html(html2);
             }
         })
         
@@ -464,6 +500,7 @@
     $("#form-3").hide();
     $("#form-4").hide();
     $("#form-5").hide();
+    $("#form-6").hide();
     
     $("#btn-form-1").click(function(){
         $("#btn-form-1").addClass('active');
@@ -471,12 +508,14 @@
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").removeClass('active');
         $("#btn-form-5").removeClass('active');
+        $("#btn-form-6").removeClass('active');
         
         $("#form-1").show();
         $("#form-2").hide();
         $("#form-3").hide();
         $("#form-4").hide();
         $("#form-5").hide();
+        $("#form-6").hide();
     })
     
     $("#btn-form-2").click(function(){
@@ -485,12 +524,14 @@
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").removeClass('active');
         $("#btn-form-5").removeClass('active');
+        $("#btn-form-6").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").show();
         $("#form-3").hide();
         $("#form-4").hide();
         $("#form-5").hide();
+        $("#form-6").hide();
     })
     
     $("#btn-form-3").click(function(){
@@ -499,12 +540,14 @@
         $("#btn-form-3").addClass('active');
         $("#btn-form-4").removeClass('active');
         $("#btn-form-5").removeClass('active');
+        $("#btn-form-6").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").hide();
         $("#form-3").show();
         $("#form-4").hide();
         $("#form-5").hide();
+        $("#form-6").hide();
     })
     
     $("#btn-form-4").click(function(){
@@ -513,12 +556,14 @@
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").addClass('active');
         $("#btn-form-5").removeClass('active');
+        $("#btn-form-6").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").hide();
         $("#form-3").hide();
         $("#form-4").show();
         $("#form-5").hide();
+        $("#form-6").hide();
     })
     
     $("#btn-form-5").click(function(){
@@ -527,12 +572,30 @@
         $("#btn-form-3").removeClass('active');
         $("#btn-form-4").removeClass('active');
         $("#btn-form-5").addClass('active');
+        $("#btn-form-6").removeClass('active');
         
         $("#form-1").hide();
         $("#form-2").hide();
         $("#form-3").hide();
         $("#form-4").hide();
         $("#form-5").show();
+        $("#form-6").hide();
+    })
+    
+    $("#btn-form-6").click(function(){
+        $("#btn-form-1").removeClass('active');
+        $("#btn-form-2").removeClass('active');
+        $("#btn-form-3").removeClass('active');
+        $("#btn-form-4").removeClass('active');
+        $("#btn-form-5").removeClass('active');
+        $("#btn-form-6").addClass('active');
+        
+        $("#form-1").hide();
+        $("#form-2").hide();
+        $("#form-3").hide();
+        $("#form-4").hide();
+        $("#form-5").hide();
+        $("#form-6").show();
     })
 
     $("#btn-edit").click(function(){
@@ -569,4 +632,115 @@
         var c = confirm("Yakin akan menonaktifkan kelas ini?")
         return c;
     })
+    
+    $("#btn-pindah-peserta").click(function(){
+        var c = confirm("Yakin akan memindahkan peserta?")
+        return c;
+    })
+    
+    // generate peserta 
+        $("#tipe_kelas").change(function(){
+            let tipe = $(this).val();
+
+            $.ajax({
+                url: "<?= base_url()?>kelas/get_koor_kelas",
+                dataType: "JSON",
+                data: {tipe: tipe},
+                method: "POST",
+                success: function(result){
+                    // console.log(result)
+                    html = "";
+                    result.kelas.forEach(kelas => {
+                        html += `<option value="`+kelas.id_kelas+`">`+kelas.peserta+`</option>`
+                    });
+                    $("#id_kelas_pindah").html(html);
+                }
+            })
+        })
+        
+        $("#btnGenerate").click(function(){
+            let id_peserta = $("#id_generate").val();
+
+            $.ajax({
+                url: "<?= base_url()?>peserta/get_detail_peserta",
+                dataType: "JSON",
+                data: {id: id_peserta},
+                method: "POST",
+                success: function(data){
+                    // console.log(data);
+                    if(data.diri != null){
+                        $("#nama_peserta").val(data.diri.nama_peserta)
+                        $("#no_hp").val(data.diri.no_hp)
+                        $("#t4_lahir").val(data.diri.t4_lahir)
+                        $("#tgl_lahir").val(data.diri.tgl_lahir)
+                        $("#tgl_masuk").val(data.diri.tgl_masuk)
+                        $("#umur").val(data.diri.umur)
+                        $("#jk").val(data.diri.jk)
+                        $("#pendidikan").val(data.diri.pendidikan)
+                        $("#status_nikah").val(data.diri.status_nikah)
+                        $("#info").val(data.diri.info);
+                        
+                        var info = ["Teman", "Spanduk", "Media Elektronik", "Civitas Tar-Q", "Brosur", "Peserta", "Event"]
+                        if(data.diri.info == "" || data.diri.info == null){
+                            $("#info").val("");
+                            $("#civitas").attr("disabled", true);
+                            $("#civitas").val("");
+                        } else if(info.includes(data.diri.info) == false){
+                            $("#info").val("Lainnya");
+                            $("#civitas").attr("disabled", false);
+                            $("#civitas").val(data.diri.info);
+                        } else {
+                            $("#info").val(data.diri.info);
+                            $("#civitas").attr("disabled", true);
+                            $("#civitas").val("");
+                        }
+
+                        // data alamat
+                        $("#alamat").val(data.alamat.alamat)
+                        $("#kel").val(data.alamat.kel)
+                        $("#kd_pos").val(data.alamat.kd_pos)
+                        $("#kec").val(data.alamat.kec)
+                        $("#kab_kota").val(data.alamat.kab_kota)
+                        $("#provinsi").val(data.alamat.provinsi)
+                        $("#no_telp").val(data.alamat.no_telp)
+                        $("#email").val(data.alamat.email)
+
+                        // data pekerjaan
+                        $("#nama_perusahaan").val(data.pekerjaan.nama_perusahaan)
+                        $("#alamat_perusahaan").val(data.pekerjaan.alamat_perusahaan)
+                        $("#no_telp_perusahaan").val(data.pekerjaan.no_telp_perusahaan)
+                        
+                        var pekerjaan = ["Pelajar", "Mahasiswa", "Swasta", "PNS/BUMN", "TNI/POLRI"]
+                        if(data.pekerjaan.pekerjaan == "" || data.pekerjaan.pekerjaan == null){
+                            $("#pekerjaan").val(data.pekerjaan.pekerjaan)
+                            $("#pekerjaan_lainnya").attr("disabled", true);
+                            $("#pekerjaan_lainnya").val("");
+                        } else if(pekerjaan.includes(data.pekerjaan.pekerjaan) == false){
+                            $("#pekerjaan").val("Lainnya");
+                            $("#pekerjaan_lainnya").attr("disabled", false);
+                            $("#pekerjaan_lainnya").val(data.pekerjaan.pekerjaan);
+                        } else {
+                            $("#pekerjaan").val(data.pekerjaan.pekerjaan);
+                            $("#pekerjaan_lainnya").attr("disabled", true);
+                            $("#pekerjaan_lainnya").val("");
+                        }
+
+                        // data ortu
+                        $("#nama_ibu").val(data.ortu.nama_ibu)
+                        $("#t4_lahir_ibu").val(data.ortu.t4_lahir_ibu)
+                        $("#tgl_lahir_ibu").val(data.ortu.tgl_lahir_ibu)
+                        $("#nama_ayah").val(data.ortu.nama_ayah)
+                        $("#t4_lahir_ayah").val(data.ortu.t4_lahir_ayah)
+                        $("#tgl_lahir_ayah").val(data.ortu.tgl_lahir_ayah)
+
+                        $(".msg-generate").html(`<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengenerate data `+data.diri.nama_peserta+`<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`)
+                    } else {
+                        $("#formPendaftaran").trigger("reset");
+                        $(".msg-generate").html(`<div class="alert alert-danger alert-dismissible fade show" role="alert">Gagal mengenerate data<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`)
+                    }
+                    
+                }
+            })
+        })
+    // generate peserta 
 </script>

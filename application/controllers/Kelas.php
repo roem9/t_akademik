@@ -161,6 +161,22 @@ class Kelas extends CI_CONTROLLER{
             $data = $this->Akademik_model->get_peserta_nonaktif_by_kelas($id);
             echo json_encode($data);
         }
+
+        public function get_koor_kelas(){
+            $tipe = $this->input->post("tipe");
+            $kelas = $this->Main_model->get_all_join_table("kelas", "kelas_koor", "id_kelas", ["tipe_kelas" => $tipe, "status" => "aktif"]);
+            foreach ($kelas as $i => $kelas) {
+                $data['kelas'][$i] = $kelas;
+                $peserta = $this->Main_model->get_one("peserta", ["id_peserta" => $kelas['id_peserta']]);
+                $data['kelas'][$i]['peserta'] = $peserta['nama_peserta'];
+            }
+
+            usort($data['kelas'], function($a, $b) {
+                return $a['peserta'] <=> $b['peserta'];
+            });
+
+            echo json_encode($data);
+        }
         
     // get data
 
@@ -230,6 +246,32 @@ class Kelas extends CI_CONTROLLER{
                 $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil memindahkan peserta ke takhosus<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');        
             } else {
                 $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal memindahkan peserta ke takhosus, karena tidak ada peserta yang dipilih<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            }
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        public function pindah_peserta_privat(){
+            // var_dump($_POST);
+            $id_peserta = $this->input->post("id_peserta", TRUE);
+            $id_kelas = $this->input->post("id_kelas_pindah", TRUE);
+            if(!empty($id_peserta) && !empty($id_kelas)){
+                foreach ($id_peserta as $peserta) {
+                    $cek = $this->Main_model->get_one("kelas_koor", ["id_peserta" => $peserta]);
+                    if($cek){
+                        break;
+                    }
+                }
+
+                if($cek){
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal memindahkan peserta ke kelas lain, ganti koordinator kelas terlebih dahulu<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                } else {
+                    foreach ($id_peserta as $id_peserta) {
+                        $this->Main_model->edit_data("peserta", ["id_peserta" => $id_peserta], ["id_kelas" => $id_kelas]);
+                    }
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil memindahkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                }
+            } else {
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert"><i class="fa fa-times-circle text-danger mr-1"></i> Gagal memindahkan peserta ke kelas lain, data yang diinputkan tidak lengkap<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
             redirect($_SERVER['HTTP_REFERER']);
         }

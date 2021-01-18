@@ -55,5 +55,13 @@ class Main_model extends CI_MODEL{
             $nominal = str_replace(".", "", $nominal);
             return $nominal;
         }
+        
+        public function get_all_join_table($table1, $table2, $key, $where){
+            $this->db->from($table1);
+            $this->db->join($table2, "$table1.$key = $table2.$key", "right");
+            if($where)
+                $this->db->where($where);
+            return $this->db->get()->result_array();
+        }
     // tes 
 }
