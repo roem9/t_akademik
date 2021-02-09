@@ -591,6 +591,56 @@ class Laporan extends CI_CONTROLLER{
         // var_dump($data);
     }
 
+    public function tahsin($id_kelas){        
+        $data['title'] = "Laporan Kelas Tahsin";
+        $kelas = $this->Main_model->get_one("kelas", ["md5(id_kelas)" => $id_kelas]);
+        $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+        $jadwal = $this->Main_model->get_all("jadwal", ["id_kelas" => $kelas['id_kelas'], "status" => "aktif"]);
+
+        $data['kelas'] = $kelas;
+        $data['kpq'] = $kpq;
+        $data['jadwal'] = $jadwal;
+        $data['peserta'] = [];
+        $peserta = $this->Main_model->get_all("peserta", ["md5(id_kelas)" => $id_kelas]);
+
+        foreach ($peserta as $i => $peserta) {
+            $data_peserta = $this->Main_model->get_one("peserta", ["no_peserta" => $peserta['no_peserta']]);
+            $data['peserta'][$i] = $data_peserta;
+            $data['peserta'][$i]['laporan'] = $this->Main_model->get_all("laporan_tahsin", ["id_kelas" => $kelas['id_kelas'], "no_peserta" => $peserta['no_peserta'], "hapus" => 0]);
+            // $data['peserta'][$i]['laporan'] = $this->Main_model->get_all("laporan_tahsin", ["no_peserta" => $peserta['no_peserta'], "hapus" => 0]);
+        }
+
+        $this->load->view("templates/header", $data);
+        $this->load->view("templates/sidebar");
+        $this->load->view("laporan/laporan-tahsin");
+        $this->load->view("templates/footer");
+    }
+
+    public function b_arab($id_kelas){        
+        $data['title'] = "Laporan Kelas Bahasa Arab";
+        $kelas = $this->Main_model->get_one("kelas", ["md5(id_kelas)" => $id_kelas]);
+        $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+        $jadwal = $this->Main_model->get_all("jadwal", ["id_kelas" => $kelas['id_kelas'], "status" => "aktif"]);
+
+        $data['kelas'] = $kelas;
+        $data['kpq'] = $kpq;
+        $data['jadwal'] = $jadwal;
+        $data['peserta'] = [];
+        $peserta = $this->Main_model->get_all("peserta", ["md5(id_kelas)" => $id_kelas]);
+
+        foreach ($peserta as $i => $peserta) {
+            $data_peserta = $this->Main_model->get_one("peserta", ["no_peserta" => $peserta['no_peserta']]);
+            $data['peserta'][$i] = $data_peserta;
+            $data['peserta'][$i]['laporan'] = $this->Main_model->get_all("laporan_arab", ["id_kelas" => $kelas['id_kelas'], "no_peserta" => $peserta['no_peserta'], "hapus" => 0]);
+            // $data['peserta'][$i]['laporan'] = $this->Main_model->get_all("laporan_tahsin", ["no_peserta" => $peserta['no_peserta'], "hapus" => 0]);
+        }
+
+        $this->load->view("templates/header", $data);
+        $this->load->view("templates/sidebar");
+        $this->load->view("laporan/laporan-arab");
+        $this->load->view("templates/footer");
+    }
+
     // get
     public function get_kesediaan(){
         $data = explode("|", $this->input->post("id"));

@@ -20,6 +20,8 @@ class Peserta extends CI_CONTROLLER{
             $data['peserta'] = $this->Main_model->get_all("peserta_reguler", ["status" => "aktif"], "nama_peserta", "ASC");
         }
         $data['tabs'] = 'reguler';
+
+        $data['status'] = $status;
         
         $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
@@ -40,6 +42,8 @@ class Peserta extends CI_CONTROLLER{
             $data['peserta'] = $this->Main_model->get_all("peserta_pv_khusus", ["status" => "aktif"], "nama_peserta", "ASC");
         }
         $data['tabs'] = 'pv khusus';
+
+        $data['status'] = $status;
         
         $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
@@ -64,6 +68,8 @@ class Peserta extends CI_CONTROLLER{
             $data['peserta'] = $this->Main_model->get_all("peserta_pv_luar", ["status" => "aktif"], "nama_peserta", "ASC");
         }
         
+        $data['status'] = $status;
+
         $data['kpq'] = $this->Akademik_model->get_all_kpq_aktif();
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();

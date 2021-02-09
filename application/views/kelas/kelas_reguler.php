@@ -206,6 +206,9 @@
                         <th>Waktu</th>
                         <th>Pengajar</th>
                         <th>Peserta</th>
+                        <?php if($status == "aktif") :?>
+                          <th>Laporan</th>
+                        <?php endif;?>
                         <th>Detail</th>
                     </thead>
                     <tbody>
@@ -226,6 +229,20 @@
                                 <td><?=$kelas['data']['jam']?></td>
                                 <td><?=$kelas['data']['nama_kpq']?></td>
                                 <td><center><?=$kelas['peserta']?></center></td>
+                                <?php if($status == "aktif") :?>
+                                  <td>
+                                      <center>
+                                          <?php if($kelas['data']['program'] == "Tahfidz Anak" || $kelas['data']['program'] == "Tahfidz Remaja" || $kelas['data']['program'] == "Tahfidz Dewasa") :?>
+                                              <!-- <a target="_blank" href="<?= base_url()?>laporan/tahfidz/<?= md5($kelas['data']['id_kelas'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a> -->
+                                              -
+                                          <?php elseif($kelas['data']['program'] == "Pra Tahsin 1" || $kelas['data']['program'] == "Pra Tahsin 2" || $kelas['data']['program'] == "Pra Tahsin 3" || $kelas['data']['program'] == "Tahsin 1" || $kelas['data']['program'] == "Tahsin 2" || $kelas['data']['program'] == "Tahsin 3" || $kelas['data']['program'] == "Tahsin 4" || $kelas['data']['program'] == "Tahsin Lanjutan") : ?>
+                                              <a target="_blank" href="<?= base_url()?>laporan/tahsin/<?= md5($kelas['data']['id_kelas'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                          <?php elseif($kelas['data']['program'] == "Bahasa Arab 1" || $kelas['data']['program'] == "Bahasa Arab 2" || $kelas['data']['program'] == "Bahasa Arab 3" || $kelas['data']['program'] == "Bahasa Arab 4" || $kelas['data']['program'] == "Bahasa Arab Lanjutan") : ?>
+                                              <a target="_blank" href="<?= base_url()?>laporan/b_arab/<?= md5($kelas['data']['id_kelas'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                          <?php endif;?>
+                                      </center>
+                                  </td>
+                                <?php endif;?>
                                 <td><center><a href="#modalKelasReguler" class="btn btn-sm btn-info btn-rounded modalKelasReguler" data-toggle="modal" data-id="<?= $kelas['data']['id_kelas']?>">detail</a></center></td>
                             </tr>
                         <?php endforeach;?>

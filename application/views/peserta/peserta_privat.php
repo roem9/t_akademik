@@ -82,6 +82,9 @@
                                 <th>No Hp</th>
                                 <th>Program</th>
                                 <th>Pengajar</th>
+                                <?php if($status == "aktif") :?>
+                                    <th>Laporan</th>
+                                <?php endif;?>
                                 <th>Detail</th>
                             </tr>
                         </thead>
@@ -101,9 +104,26 @@
                                     <?php if($peserta['nama_kpq'] == ""):?>
                                         <td><center>-</center></td>
                                         <td><center>-</center></td>
+                                        <?php if($status == "aktif") :?>
+                                            <td><center>-</center></td>
+                                        <?php endif;?>
                                     <?php else :?>
                                         <td><?= $peserta['program']?></td>
                                         <td><?= $peserta['nama_kpq']?></td>
+                                        
+                                        <?php if($status == "aktif") :?>
+                                            <td>
+                                                <center>
+                                                    <?php if($peserta['program'] == "Tahfidz Anak" || $peserta['program'] == "Tahfidz Remaja" || $peserta['program'] == "Tahfidz Dewasa") :?>
+                                                        <a target="_blank" href="http://localhost/tar-q/peserta/laporan/tahfidz/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                                    <?php elseif($peserta['program'] == "Pra Tahsin 1" || $peserta['program'] == "Pra Tahsin 2" || $peserta['program'] == "Pra Tahsin 3" || $peserta['program'] == "Tahsin 1" || $peserta['program'] == "Tahsin 2" || $peserta['program'] == "Tahsin 3" || $peserta['program'] == "Tahsin 4" || $peserta['program'] == "Tahsin Lanjutan") : ?>
+                                                        <a target="_blank" href="http://localhost/tar-q/peserta/laporan/tahsin/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                                    <?php elseif($peserta['program'] == "Bahasa Arab 1" || $peserta['program'] == "Bahasa Arab 2" || $peserta['program'] == "Bahasa Arab 3" || $peserta['program'] == "Bahasa Arab 4" || $peserta['program'] == "Bahasa Arab Lanjutan") : ?>
+                                                        <a target="_blank" href="http://localhost/tar-q/peserta/laporan/b_arab/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                                    <?php endif;?>
+                                                </center>
+                                            </td>
+                                        <?php endif;?>
                                     <?php endif;?>
                                     <td><a href="#modalDetailPesertaPrivat" data-toggle="modal" data-id="<?= $peserta['id_peserta']?>" class="modalDetailPesertaPrivat btn btn-sm btn-info">detail</a></td>
                                 </tr>
