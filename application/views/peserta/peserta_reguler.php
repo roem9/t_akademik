@@ -237,11 +237,11 @@
                                     <td>
                                         <center>
                                             <?php if($peserta['program_peserta'] == "Tahfidz Anak" || $peserta['program_peserta'] == "Tahfidz Remaja" || $peserta['program_peserta'] == "Tahfidz Dewasa") :?>
-                                                <a target="_blank" href="http://localhost/tar-q/peserta/laporan/tahfidz/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                                <a target="_blank" href="https://peserta.tar-q.com/laporan/tahfidz/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
                                             <?php elseif($peserta['program_peserta'] == "Pra Tahsin 1" || $peserta['program_peserta'] == "Pra Tahsin 2" || $peserta['program_peserta'] == "Pra Tahsin 3" || $peserta['program_peserta'] == "Tahsin 1" || $peserta['program_peserta'] == "Tahsin 2" || $peserta['program_peserta'] == "Tahsin 3" || $peserta['program_peserta'] == "Tahsin 4" || $peserta['program_peserta'] == "Tahsin Lanjutan") : ?>
-                                                <a target="_blank" href="http://localhost/tar-q/peserta/laporan/tahsin/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                                <a target="_blank" href="https://peserta.tar-q.com/laporan/tahsin/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
                                             <?php elseif($peserta['program_peserta'] == "Bahasa Arab 1" || $peserta['program_peserta'] == "Bahasa Arab 2" || $peserta['program_peserta'] == "Bahasa Arab 3" || $peserta['program_peserta'] == "Bahasa Arab 4" || $peserta['program_peserta'] == "Bahasa Arab Lanjutan") : ?>
-                                                <a target="_blank" href="http://localhost/tar-q/peserta/laporan/b_arab/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
+                                                <a target="_blank" href="https://peserta.tar-q.com/laporan/b_arab/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
                                             <?php endif;?>
                                         </center>
                                     </td>
