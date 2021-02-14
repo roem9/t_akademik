@@ -16,7 +16,7 @@
           </div>
 
           <!-- DataTales Example -->
-          <div class="card shadow mb-4" style="max-width: 800px">
+          <div class="card shadow mb-4" style="max-width: 900px">
             <!-- <div class="card-header py-3"> -->
               <!-- <form action="<?= base_url()?>laporan/rekap" method="post">
                 <div class="row">
@@ -69,6 +69,7 @@
                     <th>Dibadal</th>
                     <th>Blm Rekap Badal</th>
                     <th>Rekap</th>
+                    <th>WA</th>
                   </thead>
                   <tbody>
                     <?php 
@@ -87,6 +88,7 @@
                             <td><center><?= $kbm['no_rekap']?></center></td>
                             <!-- <td>-</td> -->
                             <td><center><a href="<?= base_url()?>laporan/rekapkpq/<?=$kbm['nip'].'/'.$bulan.'/'.$tahun?>" target="_blank"><i class="fas fa-book-open"></i></a></center></td>
+                            <td><a target="_blank" href="https://api.whatsapp.com/send?phone=62<?= substr($kbm['no_hp'], 1)?>&text=<?= str_replace(' ', '%20', $kbm['text'])?>" class="btn btn-sm btn-success"><i class="fa fa-phone"></i></a></td>
                         </tr>
                     <?php endforeach;?>
                   </tbody>

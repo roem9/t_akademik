@@ -233,7 +233,6 @@
                                   <td>
                                       <center>
                                           <?php if($kelas['data']['program'] == "Tahfidz Anak" || $kelas['data']['program'] == "Tahfidz Remaja" || $kelas['data']['program'] == "Tahfidz Dewasa") :?>
-                                              <!-- <a target="_blank" href="<?= base_url()?>laporan/tahfidz/<?= md5($kelas['data']['id_kelas'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a> -->
                                               -
                                           <?php elseif($kelas['data']['program'] == "Pra Tahsin 1" || $kelas['data']['program'] == "Pra Tahsin 2" || $kelas['data']['program'] == "Pra Tahsin 3" || $kelas['data']['program'] == "Tahsin 1" || $kelas['data']['program'] == "Tahsin 2" || $kelas['data']['program'] == "Tahsin 3" || $kelas['data']['program'] == "Tahsin 4" || $kelas['data']['program'] == "Tahsin Lanjutan") : ?>
                                               <a target="_blank" href="<?= base_url()?>laporan/tahsin/<?= md5($kelas['data']['id_kelas'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>

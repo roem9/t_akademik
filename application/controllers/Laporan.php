@@ -34,6 +34,13 @@ class Laporan extends CI_CONTROLLER{
             $data['kbm'][$i]['kelas'] = COUNT($this->Akademik_model->get_all_kelas_aktif_kpq($kpq['nip']));
             $data['kbm'][$i]['jadwal'] = COUNT($this->Akademik_model->get_all_jadwal_aktif_kpq($kpq['nip']));
             $data['kbm'][$i]['no_rekap'] = COUNT($this->Akademik_model->get_badal_no_rekap_by_nip($kpq['nip']));
+            $data['kbm'][$i]['no_hp'] = $kpq['no_hp'];
+            if($kpq['jk'] == "Pria")
+                $nama = "Ustadz " . $kpq['nama_kpq'];
+            else
+                $nama = "Ustadzah " . $kpq['nama_kpq'];
+
+            $data['kbm'][$i]['text'] = "Assalamualaikum, Sudahkah hari ini " . $nama . " melengkapi rekap pengajaran? Kalau belum silahkan mengisi rekap di https://civitas.tar-q.com. Terima kasih atas kerjasamanya";
         }
         
         
