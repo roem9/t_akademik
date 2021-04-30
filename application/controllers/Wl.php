@@ -82,7 +82,8 @@ class Wl extends CI_CONTROLLER{
             $data['kelas'][$i]['data'] = $kelas;
             $data['kelas'][$i]['data']['nama_peserta'] = $peserta['nama_peserta'];
             $data['kelas'][$i]['data']['no_hp'] = $peserta['no_hp'];
-            $data['kelas'][$i]['data']['nama_kpq'] = $kpq['nama_kpq'];
+            if($kpq) $data['kelas'][$i]['data']['nama_kpq'] = "";
+            else $data['kelas'][$i]['data']['nama_kpq'] = $kpq['nama_kpq'];
             $data['kelas'][$i]['peserta'] = COUNT($this->Akademik_model->get_peserta_aktif_by_kelas($kelas['id_kelas']));
         }
         
