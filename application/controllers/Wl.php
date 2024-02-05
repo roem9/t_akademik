@@ -36,10 +36,16 @@ class Wl extends CI_CONTROLLER{
         $data['program'] = $this->Akademik_model->get_all_program();
         $data['link'] = base_url() . "wl/get_peserta_wl_reguler_by_kategori";
 
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar", $data);
+        $data['sidebar'] = "wl";
+        $data['sidebarDropdown'] = "wl reguler";
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
         $this->load->view("wl/wl_reguler", $data);
-        $this->load->view("templates/footer", $data);
+
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar", $data);
+        // $this->load->view("wl/wl_reguler", $data);
+        // $this->load->view("templates/footer", $data);
     }
 
     public function privat(){
@@ -61,10 +67,16 @@ class Wl extends CI_CONTROLLER{
         // ini_set('xdebug.var_display_max_data', '1024');
         // var_dump($data);
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar');
-        $this->load->view('wl/wl_privat', $data);
-        $this->load->view('templates/footer');
+        $data['sidebar'] = "wl";
+        $data['sidebarDropdown'] = "wl privat";
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("wl/wl_privat", $data);
+
+        // $this->load->view('templates/header', $data);
+        // $this->load->view('templates/sidebar');
+        // $this->load->view('wl/wl_privat', $data);
+        // $this->load->view('templates/footer');
     }
     
     public function pending(){
@@ -90,10 +102,15 @@ class Wl extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar');
-        $this->load->view('wl/wl_privat', $data);
-        $this->load->view('templates/footer');
+        $data['sidebar'] = "wl";
+        $data['sidebarDropdown'] = "wl pending";
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("wl/wl_privat", $data);
+        // $this->load->view('templates/header', $data);
+        // $this->load->view('templates/sidebar');
+        // $this->load->view('wl/wl_privat', $data);
+        // $this->load->view('templates/footer');
     }
 
     // add
@@ -124,7 +141,7 @@ class Wl extends CI_CONTROLLER{
             
             $result = $this->Main_model->edit_data("kelas", ["id_kelas" => $id_kelas], $data);
 
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil mengubah status kelas<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengubah status kelas');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
@@ -134,9 +151,9 @@ class Wl extends CI_CONTROLLER{
             if($jadwal != 0){
                 $this->Akademik_model->konfirm_wl($id_kelas);
                 
-                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengkonfirmasi waiting list<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->set_flashdata('pesan', 'Berhasil mengkonfirmasi waiting list');
             } else {
-                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Gagal mengkonfirmasi waiting list, Anda harus membuat jadwal terlebih dahulu<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->set_flashdata('pesan', 'Gagal mengkonfirmasi waiting list, Anda harus membuat jadwal terlebih dahulu');
             }
             
             redirect($_SERVER['HTTP_REFERER']);
@@ -144,7 +161,7 @@ class Wl extends CI_CONTROLLER{
 
         public function batal_wl($id_kelas){
             $this->Akademik_model->batal_wl($id_kelas);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil membatalkan waiting list<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil membatalkan waiting list');
             
             redirect($_SERVER['HTTP_REFERER']);
         }

@@ -1,82 +1,33 @@
 <?php
     $bul = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 ?>
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800 mt-3"><?= $title?></h1>
-          </div>
-
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4" style="max-width: 900px">
-            <!-- <div class="card-header py-3"> -->
-              <!-- <form action="<?= base_url()?>laporan/rekap" method="post">
-                <div class="row">
-                  <div class="col-sm-2 p-0">
-                    <select name="bulan" id="bulan" class="form-control form-control-sm">
-                      <option value="">bulan</option>
-                      <option value="1" <?php if($bulan == '1'){echo "selected";}?>>Jan</option>
-                      <option value="2" <?php if($bulan == '2'){echo "selected";}?>>Feb</option>
-                      <option value="3" <?php if($bulan == '3'){echo "selected";}?>>Mar</option>
-                      <option value="4" <?php if($bulan == '4'){echo "selected";}?>>Apr</option>
-                      <option value="5" <?php if($bulan == '5'){echo "selected";}?>>Mei</option>
-                      <option value="6" <?php if($bulan == '6'){echo "selected";}?>>Jun</option>
-                      <option value="7" <?php if($bulan == '7'){echo "selected";}?>>Jul</option>
-                      <option value="8" <?php if($bulan == '8'){echo "selected";}?>>Agu</option>
-                      <option value="9" <?php if($bulan == '9'){echo "selected";}?>>Sep</option>
-                      <option value="10" <?php if($bulan == '10'){echo "selected";}?>>Okt</option>
-                      <option value="11" <?php if($bulan == '11'){echo "selected";}?>>Nov</option>
-                      <option value="12" <?php if($bulan == '12'){echo "selected";}?>>Des</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2 p-0">
-                    <select name="tahun" id="tahun" class="form-control form-control-sm">
-                      <option value="">tahun</option>
-                      <option value="2019" <?php if($tahun == '2019'){echo "selected";}?>>2019</option>
-                      <option value="2020" <?php if($tahun == '2020'){echo "selected";}?>>2020</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-1 p-0">
-                    <input type="submit" value="go" class="btn btn-sm btn-primary">
-                  </div>
-                  <div class="col-sm-3 p-0 ml-3">
-                    <a href="<?= base_url()?>laporan/export_rekap_kbm/<?=$bulan.'/'.$tahun?>" class="btn btn-success btn-sm">Cetak Rekap <?=$bul[$bulan-1]."-".$tahun?></a>
-                  </div>
-                </div>
-              </form> -->
-              <!-- <h6 class="m-0 font-weight-bold text-primary">Data KBM</h6>
-            </div> -->
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
-                  <thead>
-                    <th>No</th>
-                    <th>Nama KPQ</th>
-                    <?php if(date("m") == $bulan && date("Y") == $tahun) :?>
-                      <th>Kelas</th>
-                      <th>Jadwal</th>
-                    <?php endif;?>
-                    <th>KBM</th>
-                    <th>Badal</th>
-                    <th>Dibadal</th>
-                    <th>Blm Rekap Badal</th>
-                    <th>Rekap</th>
-                    <th>WA</th>
-                  </thead>
-                  <tbody>
+<div class="content">
+    <div class="card shadow mb-4 overflow-auto">
+        <div class="card-body">
+            <table id="dataTable" class="table table-hover align-items-center mb-0 text-dark text-sm">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">No</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder all">Nama KPQ</th>
+                        <?php if(date("m") == $bulan && date("Y") == $tahun) :?>
+                          <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Kelas</th>
+                          <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Jadwal</th>
+                        <?php endif;?>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">KBM</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Badal</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Dibadal</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Blm Rekap Badal</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Action</th>
+                        <!-- <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Rekap</th>
+                        <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">WA</th> -->
+                    </tr>
+                </thead>
+                <tbody>
                     <?php 
                         $i = 0;
                         foreach ($kbm as $j => $kbm) :?>
                         <tr>
-                            <td><?= ++$i?></td>
+                            <td><center><?= ++$i?></center></td>
                             <td><?= $kbm['kpq']?></td>
                             <?php if(date("m") == $bulan && date("Y") == $tahun) :?>
                               <td><center><?= $kbm['kelas']?></center></td>
@@ -87,22 +38,32 @@
                             <td><center><?= $kbm['dibadal']?></center></td>
                             <td><center><?= $kbm['no_rekap']?></center></td>
                             <!-- <td>-</td> -->
-                            <td><center><a href="<?= base_url()?>laporan/rekapkpq/<?=$kbm['nip'].'/'.$bulan.'/'.$tahun?>" target="_blank"><i class="fas fa-book-open"></i></a></center></td>
-                            <td><a target="_blank" href="https://api.whatsapp.com/send?phone=62<?= substr($kbm['no_hp'], 1)?>&text=<?= str_replace(' ', '%20', $kbm['text'])?>" class="btn btn-sm btn-success"><i class="fa fa-phone"></i></a></td>
+							<td>
+								<a href="<?= base_url()?>laporan/rekapkpq/<?=$kbm['nip'].'/'.$bulan.'/'.$tahun?>" target="_blank">
+									<span class="badge bg-gradient-info">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book-fill" viewBox="0 0 16 16">
+											<path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+										</svg>
+									</span>
+								</a>
+								<a href="https://api.whatsapp.com/send?phone=62<?= substr($kbm['no_hp'], 1)?>&text=<?= str_replace(' ', '%20', $kbm['text'])?>" target="_blank">
+									<span class="badge bg-gradient-success">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+											<path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+										</svg>
+									</span>
+								</a>
+							</td>
                         </tr>
                     <?php endforeach;?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
+                </tbody>
+            </table>
         </div>
-        <!-- /.container-fluid -->
+    </div>
+</div>
 
-      </div>
-      <!-- End of Main Content -->
 
+<?= footer()?>
 <script>
-    $("#laporan").addClass("active");
+    let table = new DataTable('#dataTable');
 </script>

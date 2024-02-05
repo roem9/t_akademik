@@ -32,10 +32,17 @@ class Badal extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("badal/jadwal", $data);
+        // $this->load->view("templates/footer");
+
+        
+        $data['sidebar'] = "badal";
+        $data['sidebarDropdown'] = "badal jadwal";
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
         $this->load->view("badal/jadwal", $data);
-        $this->load->view("templates/footer");
     }
 
     public function konfirmasi(){
@@ -49,11 +56,16 @@ class Badal extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        // var_dump($data);
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        $data['sidebar'] = "badal";
+        $data['sidebarDropdown'] = "badal konfirmasi";
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
         $this->load->view("badal/konfirmasi", $data);
-        $this->load->view("templates/footer");
+        // var_dump($data);
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("badal/konfirmasi", $data);
+        // $this->load->view("templates/footer");
 
     }
 
@@ -72,10 +84,16 @@ class Badal extends CI_CONTROLLER{
         $data['program'] = $this->Akademik_model->get_all_program();
 
         // var_dump($data);
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("badal/rekap", $data);
+        // $this->load->view("templates/footer");
+
+        $data['sidebar'] = "badal";
+        $data['sidebarDropdown'] = "badal rekap";
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
         $this->load->view("badal/rekap", $data);
-        $this->load->view("templates/footer");
     }
 
     // get
@@ -107,7 +125,7 @@ class Badal extends CI_CONTROLLER{
         public function konfirm_badal($id){
             $this->Akademik_model->konfirm_badal($id);
             
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil mengkonfirmasi badal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengkonfirmasi badal');
             
             redirect($_SERVER['HTTP_REFERER']);
         }
@@ -117,7 +135,7 @@ class Badal extends CI_CONTROLLER{
         public function delete_badal_by_id_kbm($id){
             $this->Akademik_model->delete_badal_by_id_kbm($id);
             
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil membatalkan badal<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil membatalkan badal');
             
             redirect($_SERVER['HTTP_REFERER']);
         }

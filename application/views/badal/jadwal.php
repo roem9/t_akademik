@@ -1,78 +1,88 @@
-<div class="modal fade" id="modalJadwalBadal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal fade" id="modalJadwalBadal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title capitalize" id="modalJadwalBadalTitle"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body cus-font">
         <ul class="list-group list-badal"></ul>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Content Wrapper -->
-<div id="content-wrapper" class="d-flex flex-column">
-
-    <!-- Main Content -->
-    <div id="content">
-
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-
-        <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800 mt-3"><?= $title?></h1>
-        </div>
-
-        <!-- DataTales Example -->
-        <div class="card shadow mb-4" style="max-width: 520px">
+<div class="content">
+    <div class="card shadow mb-4 overflow-auto">
         <div class="card-body">
-            <div class="table-responsive">
-            <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
+            <table id="dataTable" class="table table-hover align-items-center mb-0 text-dark text-sm">
                 <thead>
-                    <th width=10%>No</th>
-                    <th>Waktu</th>
-                    <th>R</th>
-                    <th>PK</th>
-                    <th>PL</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">No</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder">Waktu</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">R</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">PK</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">PL</th>
                 </thead>
                 <tbody>
                     <?php 
                         $no = 0;
                         foreach ($jadwal as $jadwal) :?>
                         <tr class="<?php echo ($jadwal['tgl'] == date('Y-m-d') ? 'bg-info' : '')?>">
-                            <td width=10%><center><?= ++$no?></center></td>
+                            <td><center><?= ++$no?></center></td>
                             <td><?= $jadwal['hari']?> <?= date("d-M-Y", strtotime($jadwal['tgl']))?></td>
-                            <td width=10%><center><a href="#modalJadwalBadal" class="modal-jadwal-badal" data-toggle="modal" data-hari="<?= $jadwal['hari']?>" data-id="<?= $jadwal['tgl']?>|Reguler"><?= $jadwal['r']?></a></center></td>
-                            <td width=10%><center><a href="#modalJadwalBadal" class="modal-jadwal-badal" data-toggle="modal" data-hari="<?= $jadwal['hari']?>" data-id="<?= $jadwal['tgl']?>|Pv Khusus"><?= $jadwal['pk']?></a></center></td>
-                            <td width=10%><center><a href="#modalJadwalBadal" class="modal-jadwal-badal" data-toggle="modal" data-hari="<?= $jadwal['hari']?>" data-id="<?= $jadwal['tgl']?>|Pv Luar"><?= $jadwal['pl']?></a></center></td>
+                            <td>
+                              <center>
+                                <a href="javascript:void(0)" class="modal-jadwal-badal" data-bs-target="#modalJadwalBadal" data-bs-toggle="modal" data-hari="<?= $jadwal['hari']?>" data-id="<?= $jadwal['tgl']?>|Reguler">
+                                    <span class="badge bg-gradient-success">
+                                      <?= $jadwal['r']?>
+                                    </span>
+                                </a>
+                              </center>
+                            </td>
+                            <td>
+                              <center>
+                                <a href="javascript:void(0)" class="modal-jadwal-badal" data-bs-target="#modalJadwalBadal" data-bs-toggle="modal" data-hari="<?= $jadwal['hari']?>" data-id="<?= $jadwal['tgl']?>|Pv Khusus">
+                                    <span class="badge bg-gradient-success">
+                                      <?= $jadwal['pk']?>
+                                    </span>
+                                </a>
+                              </center>
+                            </td>
+                            <td>
+                              <center>
+                                <a href="javascript:void(0)" class="modal-jadwal-badal" data-bs-target="#modalJadwalBadal" data-bs-toggle="modal" data-hari="<?= $jadwal['hari']?>" data-id="<?= $jadwal['tgl']?>|Pv Luar">
+                                    <span class="badge bg-gradient-success">
+                                      <?= $jadwal['pl']?>
+                                    </span>
+                                </a>
+                              </center>
+                            </td>
                         </tr>
                     <?php endforeach;?>
                 </tbody>
             </table>
-            </div>
         </div>
-        </div>
-
     </div>
-    <!-- /.container-fluid -->
-
-    </div>
-    <!-- End of Main Content -->
 </div>
-<!-- End of Content Wrapper -->
+
+<?= footer()?>
 
 <script>
-    $("#badal").addClass("active")
+    let table = new DataTable('#dataTable');
 
-    $(".modal-jadwal-badal").click(function(){
+    <?php if( $this->session->flashdata('pesan') ) : ?>
+        Toast.fire({
+            icon: "success",
+            title: "<?= $this->session->flashdata('pesan')?>"
+        });
+    <?php endif; ?>
+
+    $(document).on("click", ".modal-jadwal-badal", function(){
         let id = $(this).data("id");
         let hari = $(this).data("hari");
         let title = id.split("|");
@@ -90,7 +100,7 @@
             success : function(data){
                 let html = "";
                 for (let i = 0; i < data.length; i++) {
-                    html += '<ul class="list-group mb-3">'+
+                    html += '<ul class="list-group mb-3 text-sm">'+
                                 '<li class="list-group-item list-group-item-warning d-flex justify-content-between"><span>'+data[i].jam+'</span>'+data[i].peserta+' <b>'+data[i].program_kbm+'</b></li>'+
                                 '<li class="list-group-item d-flex justify-content-between"><span>'+data[i].kpq+'</span><span><i class="fa fa-long-arrow-alt-right"></i></span><span>'+data[i].kpq_badal+'</span></li>'+
                                 '<li class="list-group-item">Tempat : '+data[i].tempat+'</li>'+

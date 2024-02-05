@@ -1,11 +1,6 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <div class="d-flex justify-content-begin mt-3">
-                    <h1 class="h3 mb-0 text-gray-800 mr-3"><?= $title?></h1>
-                </div>
-            </div>
             <table border=1>
                 <tr>
                     <td style="padding: 10px">Nama Pengajar</td>
@@ -50,6 +45,5 @@
         </div>
     </div>
 </div>
-<script>
-    $("#sidebarRekap").addClass("active");
-</script>
+
+<?= footer()?>

@@ -52,15 +52,25 @@ class Laporan extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/rekap", $data);
+        // $this->load->view("templates/footer", $data);
+
+        $data['sidebar'] = "laporan";
+        $data['sidebarDropdown'] = "rekap kbm";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        // $this->load->view("laporan/laporan", $data);
         $this->load->view("laporan/rekap", $data);
-        $this->load->view("templates/footer", $data);
     }
     
     public function index(){
         $data['month'] = ["0" => "-", "1" => "Januari", "2" => "Februari", "3" => "Maret", "4" => "April", "5" => "Mei", "6" => "Juni", "7" => "Juli","8" => "Agustus", "9" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember"];
         $data['title'] = "Download Laporan";
+        $data['sidebar'] = "laporan";
+        $data['sidebarDropdown'] = "download laporan";
 
         $tahun = $this->Akademik_model->get_tahun_laporan();
         foreach ($tahun as $i => $tahun) {
@@ -80,11 +90,13 @@ class Laporan extends CI_CONTROLLER{
         // ini_set('xdebug.var_display_max_data', '1024');
 
         // var_dump($data);
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
         // $this->load->view("laporan/laporan", $data);
         $this->load->view("laporan/form-laporan", $data);
-        $this->load->view("templates/footer", $data);
+        // $this->load->view("templates/footer", $data);
     }
 
     public function jadwalNonaktif(){
@@ -93,7 +105,8 @@ class Laporan extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
         $data['history'] = $this->Main_model->get_all("history_jadwal","", "tgl_history", "DESC");
-
+        $data['sidebar'] = "laporan";
+        $data['sidebarDropdown'] = "jadwal nonaktif";
         
         // ini_set('xdebug.var_display_max_depth', '10');
         // ini_set('xdebug.var_display_max_children', '256');
@@ -101,10 +114,14 @@ class Laporan extends CI_CONTROLLER{
 
         // var_dump($data['history']);
         
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/jadwal-nonaktif", $data);
+        // $this->load->view("templates/footer", $data);
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        // $this->load->view("laporan/laporan", $data);
         $this->load->view("laporan/jadwal-nonaktif", $data);
-        $this->load->view("templates/footer", $data);
     }
 
     public function kelasNonaktif(){
@@ -114,17 +131,24 @@ class Laporan extends CI_CONTROLLER{
         $data['program'] = $this->Akademik_model->get_all_program();
         $data['history'] = $this->Main_model->get_all("history_kelas","", "tgl_history", "DESC");
 
-        
+        $data['sidebar'] = "laporan";
+        $data['sidebarDropdown'] = "kelas nonaktif";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        // $this->load->view("laporan/laporan", $data);
+        $this->load->view("laporan/kelas-nonaktif", $data);
+
         // ini_set('xdebug.var_display_max_depth', '10');
         // ini_set('xdebug.var_display_max_children', '256');
         // ini_set('xdebug.var_display_max_data', '1024');
 
         // var_dump($data['history']);
         
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
-        $this->load->view("laporan/kelas-nonaktif", $data);
-        $this->load->view("templates/footer", $data);
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/kelas-nonaktif", $data);
+        // $this->load->view("templates/footer", $data);
     }
     
     public function pesertaNonaktif(){
@@ -141,10 +165,17 @@ class Laporan extends CI_CONTROLLER{
 
         // var_dump($data['history']);
         
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/peserta-nonaktif", $data);
+        // $this->load->view("templates/footer", $data);
+        $data['sidebar'] = "laporan";
+        $data['sidebarDropdown'] = "peserta nonaktif";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        // $this->load->view("laporan/laporan", $data);
         $this->load->view("laporan/peserta-nonaktif", $data);
-        $this->load->view("templates/footer", $data);
     }
 
     public function rekapKpq($nip, $bulan, $tahun){
@@ -579,6 +610,8 @@ class Laporan extends CI_CONTROLLER{
 
     public function kesediaan(){
         $data['title'] = "Kesediaan Pengajar";
+        $data['sidebar'] = "kesediaan";
+        $data['sidebarDropdown'] = "";
 
         $kesediaan = $this->Akademik_model->get_all_kesediaan_waktu_kpq();
         foreach ($kesediaan as $i => $kesediaan) {
@@ -591,10 +624,13 @@ class Laporan extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
-        $this->load->view("laporan/kesediaan");
-        $this->load->view("templates/footer");
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/kesediaan");
+        // $this->load->view("templates/footer");
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("laporan/kesediaan", $data);
         // var_dump($data);
     }
 
@@ -617,10 +653,17 @@ class Laporan extends CI_CONTROLLER{
             // $data['peserta'][$i]['laporan'] = $this->Main_model->get_all("laporan_tahsin", ["no_peserta" => $peserta['no_peserta'], "hapus" => 0]);
         }
 
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
-        $this->load->view("laporan/laporan-tahsin");
-        $this->load->view("templates/footer");
+        $data['sidebar'] = "";
+        $data['sidebarDropdown'] = "";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("laporan/laporan-tahsin", $data);
+
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/laporan-tahsin");
+        // $this->load->view("templates/footer");
     }
 
     public function b_arab($id_kelas){        
@@ -642,10 +685,17 @@ class Laporan extends CI_CONTROLLER{
             // $data['peserta'][$i]['laporan'] = $this->Main_model->get_all("laporan_tahsin", ["no_peserta" => $peserta['no_peserta'], "hapus" => 0]);
         }
 
-        $this->load->view("templates/header", $data);
-        $this->load->view("templates/sidebar");
-        $this->load->view("laporan/laporan-arab");
-        $this->load->view("templates/footer");
+        $data['sidebar'] = "";
+        $data['sidebarDropdown'] = "";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("laporan/laporan-arab", $data);
+
+        // $this->load->view("templates/header", $data);
+        // $this->load->view("templates/sidebar");
+        // $this->load->view("laporan/laporan-arab");
+        // $this->load->view("templates/footer");
     }
 
     // get
@@ -686,10 +736,10 @@ class Laporan extends CI_CONTROLLER{
         // hapus / edit
         if(isset($_POST['hapus'])){
             $this->Main_model->delete_data("history_jadwal", ["id" => $id]);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menghapus data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil menghapus data history');
         } else if(isset($_POST['edit'])){
             $this->Main_model->edit_data("history_jadwal", ["id" => $id], $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengubah data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengubah data history');
         }
         redirect($_SERVER['HTTP_REFERER']);
     }
@@ -703,10 +753,10 @@ class Laporan extends CI_CONTROLLER{
         // hapus / edit
         if(isset($_POST['hapus'])){
             $this->Main_model->delete_data("history_kelas", ["id" => $id]);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menghapus data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil menghapus data history');
         } else if(isset($_POST['edit'])){
             $this->Main_model->edit_data("history_kelas", ["id" => $id], $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengubah data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengubah data history');
         }
         redirect($_SERVER['HTTP_REFERER']);
     }
@@ -720,10 +770,10 @@ class Laporan extends CI_CONTROLLER{
         // hapus / edit
         if(isset($_POST['hapus'])){
             $this->Main_model->delete_data("history_peserta", ["id" => $id]);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil menghapus data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil menghapus data history');
         } else if(isset($_POST['edit'])){
             $this->Main_model->edit_data("history_peserta", ["id" => $id], $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i> Berhasil mengubah data history<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengubah data history');
         }
         redirect($_SERVER['HTTP_REFERER']);
     }

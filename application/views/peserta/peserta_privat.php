@@ -1,11 +1,11 @@
 <!-- modal detail peserta -->
-    <div class="modal fade" id="modalDetailPesertaPrivat" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal fade" id="modalDetailPesertaPrivat" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalDetailPesertaPrivatTitle"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -52,100 +52,108 @@
     </div>
 <!-- modal detail peserta -->
 
-<div id="content-wrapper" class="d-flex flex-column">
-    <div id="content">
-        <div class="container-fluid">
+<div class="content">
+    <div class="card shadow mb-4 overflow-auto">
+        <div class="card-body">
+            <table id="dataTable" class="table table-hover align-items-center mb-0 text-dark text-sm">
+                <thead>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Status</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder">Nama Peserta</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">No HP</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Program</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder">Pengajar</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Action</th>
+                </thead>
+                <tbody>
+                    <?php 
+                    $i = 0;
+                    foreach ($peserta as $peserta) :?>
+                        <tr>
+                            <td>
+                                <?php 
+                                    $background = "";
+                                    $msg = "";
 
-            <!-- Page Heading -->
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800 mt-3"><?= $title?></h1>
-            </div>
+                                    if($peserta['status'] == "aktif"){
+                                        $background = 'success';
+                                        $msg = 'Yakin akan menonaktifkan peserta ini?';
+                                        $statusPeserta = 'nonaktif';
+                                    } else {
+                                        $background = 'warning';
+                                        $msg = 'Yakin akan mengaktifkan peserta ini?';
+                                        $statusPeserta = 'aktif';
+                                    }
+                                ?>
 
-            <?php if( $this->session->flashdata('pesan') ) : ?>
-                <div class="row">
-                    <div class="col-6">
-                        <?= $this->session->flashdata('pesan');?>    
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <!-- DataTales Example -->
-            <div class="card shadow mb-4" style="max-width: 950px">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="dataTable" class="table table-sm cus-font">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Status</th>
-                                <th>Nama Peserta</th>
-                                <th>No Hp</th>
-                                <th>Program</th>
-                                <th>Pengajar</th>
-                                <?php if($status == "aktif") :?>
-                                    <th>Laporan</th>
-                                <?php endif;?>
-                                <th>Detail</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $i = 0;
-                            foreach ($peserta as $peserta) :?>
-                                <tr>
-                                    <td><center><?= ++$i?></center></td>
-                                    <?php if($peserta['status'] == "aktif"):?>
-                                        <td><a href="<?= base_url()?>peserta/edit_status_peserta/<?= $peserta['id_peserta']?>/nonaktif" onclick="return confirm('Yakin akan menonaktifkan peserta ini?')" class="btn btn-sm btn-outline-success">aktif</a></td>
-                                    <?php elseif($peserta['status'] == "nonaktif"):?>
-                                        <td><a href="<?= base_url()?>peserta/edit_status_peserta/<?= $peserta['id_peserta']?>/aktif" onclick="return confirm('Yakin akan mengaktifkan peserta ini?')" class="btn btn-sm btn-outline-secondary">nonaktif</a></td>
-                                    <?php endif;?>
-                                    <td><?= $peserta['nama_peserta']?></td>
-                                    <td><?= $peserta['no_hp']?></td>
-                                    <?php if($peserta['nama_kpq'] == ""):?>
-                                        <td><center>-</center></td>
-                                        <td><center>-</center></td>
+                                <a href="<?= base_url()?>peserta/edit_status_peserta/<?= $peserta['id_peserta']?>/<?= $statusPeserta?>" onclick="return confirm('<?= $msg?>')">
+                                    <span class="badge bg-gradient-<?= $background?>">
+                                        <?= $peserta['status']?>
+                                    </span>
+                                </a>
+                            </td>
+                            <td><?= $peserta['nama_peserta']?></td>
+                            <td><?= $peserta['no_hp']?></td>
+                            <?php if($peserta['nama_kpq'] == ""):?>
+                                <td><center>-</center></td> <!-- program-->
+                                <td><center>-</center></td> <!-- pengajar-->
+                                <td>
+                                    <center>
+                                        <a href="javascript:void(0)" class="modalDetailPesertaPrivat" data-bs-toggle="modal" data-bs-target="#modalDetailPesertaPrivat" target="_blank" data-id="<?= $peserta['id_peserta']?>">
+                                            <span class="badge bg-gradient-info">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </center>
+                                </td>
+                            <?php else :?>
+                                <td><?= $peserta['program']?></td>
+                                <td><?= $peserta['nama_kpq']?></td>
+                                <td>
+                                    <center>
                                         <?php if($status == "aktif") :?>
-                                            <td><center>-</center></td>
+                                            <a href="https://peserta.tar-q.com/laporan/peserta/<?= md5($peserta['no_peserta'])?>" target="_blank">
+                                                <span class="badge bg-gradient-success">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sticky" viewBox="0 0 16 16">
+                                                        <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1zM2 2.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .5.5V8H9.5A1.5 1.5 0 0 0 8 9.5V14H2.5a.5.5 0 0 1-.5-.5zm7 11.293V9.5a.5.5 0 0 1 .5-.5h4.293z"/>
+                                                    </svg>
+                                                </span>
+                                            </a>
                                         <?php endif;?>
-                                    <?php else :?>
-                                        <td><?= $peserta['program']?></td>
-                                        <td><?= $peserta['nama_kpq']?></td>
-                                        
-                                        <?php if($status == "aktif") :?>
-                                            <td>
-                                                <center>
-                                                    <?php if($peserta['program'] == "Tahfidz Anak" || $peserta['program'] == "Tahfidz Remaja" || $peserta['program'] == "Tahfidz Dewasa") :?>
-                                                        <a target="_blank" href="https://peserta.tar-q.com/laporan/peserta/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
-                                                    <?php elseif($peserta['program'] == "Pra Tahsin 1" || $peserta['program'] == "Pra Tahsin 2" || $peserta['program'] == "Pra Tahsin 3" || $peserta['program'] == "Tahsin 1" || $peserta['program'] == "Tahsin 2" || $peserta['program'] == "Tahsin 3" || $peserta['program'] == "Tahsin 4" || $peserta['program'] == "Tahsin Lanjutan") : ?>
-                                                        <a target="_blank" href="https://peserta.tar-q.com/laporan/peserta/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
-                                                    <?php elseif($peserta['program'] == "Bahasa Arab 1" || $peserta['program'] == "Bahasa Arab 2" || $peserta['program'] == "Bahasa Arab 3" || $peserta['program'] == "Bahasa Arab 4" || $peserta['program'] == "Bahasa Arab Lanjutan") : ?>
-                                                        <a target="_blank" href="https://peserta.tar-q.com/laporan/peserta/<?= md5($peserta['no_peserta'])?>" class="btn btn-sm btn-warning"><i class="fa fa-file"></i></a>
-                                                    <?php endif;?>
-                                                </center>
-                                            </td>
-                                        <?php endif;?>
-                                    <?php endif;?>
-                                    <td><a href="#modalDetailPesertaPrivat" data-toggle="modal" data-id="<?= $peserta['id_peserta']?>" class="modalDetailPesertaPrivat btn btn-sm btn-info">detail</a></td>
-                                </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            </div>
-
+                                            <a href="javascript:void(0)" class="modalDetailPesertaPrivat" data-bs-toggle="modal" data-bs-target="#modalDetailPesertaPrivat" target="_blank" data-id="<?= $peserta['id_peserta']?>">
+                                                <span class="badge bg-gradient-info">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                    </center>
+                                </td>
+                            <?php endif;?>
+                        </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
+<?= footer()?>
+
 <script>
-    $("#peserta").addClass("active");
+    let table = new DataTable('#dataTable');
+
+    <?php if( $this->session->flashdata('pesan') ) : ?>
+        Toast.fire({
+            icon: "success",
+            title: "<?= $this->session->flashdata('pesan')?>"
+        });
+    <?php endif; ?>
     
-    // $("#btn-form-1").addClass("active");
-    // $("#form-1").show();
-    // $("#form-2").hide();
-    
-    $(".modalDetailPesertaPrivat").click(function(){
+    $(document).on("click", ".modalDetailPesertaPrivat", function(){
         const id = $(this).data('id');
         
         $.ajax({
@@ -166,6 +174,13 @@
                 $("#tgl_lahir").val(data.tgl_lahir);
             }
         })
+
+        $(".content").hide();
+    })
+
+    var modalDetailPesertaPrivat = document.getElementById('modalDetailPesertaPrivat')
+    modalDetailPesertaPrivat.addEventListener('hidden.bs.modal', function (event) {
+        $(".content").show();
     })
 
     // validation

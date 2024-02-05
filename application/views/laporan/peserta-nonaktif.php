@@ -3,13 +3,13 @@
 ?>
   
     <!-- modal nonaktif -->
-      <div class="modal fade" id="modalEditHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+      <div class="modal fade" id="modalEditHistory" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable" role="document">
               <div class="modal-content">
                   <div class="modal-header">
                       <h5 class="modal-title" id="modalEditHistoryTitle">Edit History</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
+                      <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
                       </button>
                   </div>
                   <div class="modal-body">
@@ -35,7 +35,7 @@
                               <input type="date" name="tgl_history" class="form-control form-control-sm" required>
                           </div>
                           <div class="d-flex justify-content-end">
-                              <input type="submit" name="hapus" value="Hapus" class="btn btn-sm btn-danger mr-3" id="btn-hapus">
+                              <input type="submit" name="hapus" value="Hapus" class="btn btn-sm btn-danger me-3" id="btn-hapus">
                               <input type="submit" name="edit" value="Edit" class="btn btn-sm btn-success" id="btn-edit">
                           </div>
                       </form>
@@ -44,45 +44,22 @@
           </div>
       </div>
     <!-- modal nonaktif -->
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
 
-      <!-- Main Content -->
-      <div id="content">
-
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800 mt-3"><?= $title?></h1>
-          </div>
-          
-          <!-- berhasil memindahkan peserta -->
-          <?php if( $this->session->flashdata('pesan') ) : ?>
-              <div class="row">
-                  <div class="col-6">
-                      <?= $this->session->flashdata('pesan');?>
-                      </div>
-              </div>
-          <?php endif; ?>
-
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4" style="max-width: 1000px">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover table-sm cus-font" id="dataTable" cellspacing="0">
-                  <thead>
-                    <th style="width: 5%">No</th>
-                    <th>Nama Peserta</th>
-                    <th style="width: 15%">Program</th>
-                    <th>Pengajar</th>
-                    <th style="width: 7%">Hari</th>
-                    <th style="width: 10%">Jam</th>
-                    <th style="width: 7%">Tgl Off</th>
-                  </thead>
-                  <tbody>
-                    <?php 
+<div class="content">
+    <div class="card shadow mb-4 overflow-auto">
+        <div class="card-body">
+            <table id="dataTable" class="table table-hover align-items-center mb-0 text-dark text-sm">
+                <thead>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">No</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder">Nama Peserta</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Program</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Pengajar</th>
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Hari</th> 
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Jam</th> 
+                    <th class="text-uppercase text-dark text-xxs font-weight-bolder w-1">Tgl Off</th>
+                </thead>
+                <tbody>
+                <?php 
                       $no = 1;
                       foreach ($history as $history) :?>
                       <tr>
@@ -92,23 +69,32 @@
                         <td><?= $history['nama_kpq']?></td>
                         <td><?= $history['hari']?></td>
                         <td><?= $history['jam']?></td>
-                        <td><a href="#modalEditHistory" data-toggle="modal" class="modal-edit btn btn-sm btn-outline-info" data-id="<?= $history['id']?>"><?= date("d-m-Y", strtotime($history['tgl_history']))?></a></td>
+                        <td>
+                            <a href="javascript:void(0)" class="modal-edit" data-bs-target="#modalEditHistory" data-bs-toggle="modal" data-id="<?= $history['id']?>">
+                                <span class="badge bg-gradient-info">
+                                    <?= date("d-m-Y", strtotime($history['tgl_history']))?>
+                                </span>
+                            </a>
+                        </td>
                       </tr>
                     <?php endforeach;?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
+                </tbody>
+            </table>
         </div>
-        <!-- /.container-fluid -->
+    </div>
+</div>
 
-      </div>
-      <!-- End of Main Content -->
+<?= footer()?>
 
 <script>
-    $("#laporan").addClass("active");
+    let table = new DataTable('#dataTable');
+
+    <?php if( $this->session->flashdata('pesan') ) : ?>
+        Toast.fire({
+            icon: "success",
+            title: "<?= $this->session->flashdata('pesan')?>"
+        });
+    <?php endif; ?>
 
     $(".modal-edit").click(function(){
       var id = $(this).data("id");

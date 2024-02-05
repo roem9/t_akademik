@@ -27,10 +27,16 @@ class Peserta extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar');
-        $this->load->view('peserta/peserta_reguler', $data);
-        $this->load->view('templates/footer');
+        $data['sidebar'] = "peserta";
+        $data['sidebarDropdown'] = "peserta reguler $status";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("peserta/peserta_reguler", $data);
+        // $this->load->view('templates/header', $data);
+        // $this->load->view('templates/sidebar');
+        // $this->load->view('peserta/peserta_reguler', $data);
+        // $this->load->view('templates/footer');
     }
 
     public function pvkhusus($status){
@@ -49,10 +55,16 @@ class Peserta extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar');
-        $this->load->view('peserta/peserta_privat', $data);
-        $this->load->view('templates/footer');
+        $data['sidebar'] = "peserta";
+        $data['sidebarDropdown'] = "peserta pv khusus $status";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("peserta/peserta_privat", $data);
+        // $this->load->view('templates/header', $data);
+        // $this->load->view('templates/sidebar');
+        // $this->load->view('peserta/peserta_privat', $data);
+        // $this->load->view('templates/footer');
     }
     
     public function pvluar($status){
@@ -74,10 +86,16 @@ class Peserta extends CI_CONTROLLER{
         $data['ruangan'] = $this->Akademik_model->get_all_ruangan();
         $data['program'] = $this->Akademik_model->get_all_program();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar');
-        $this->load->view('peserta/peserta_privat', $data);
-        $this->load->view('templates/footer');
+        $data['sidebar'] = "peserta";
+        $data['sidebarDropdown'] = "peserta pv luar $status";
+
+        $this->load->view("layout/header", $data);
+        $this->load->view("layout/navbar", $data);
+        $this->load->view("peserta/peserta_privat", $data);
+        // $this->load->view('templates/header', $data);
+        // $this->load->view('templates/sidebar');
+        // $this->load->view('peserta/peserta_privat', $data);
+        // $this->load->view('templates/footer');
     }
 
     // get
@@ -91,14 +109,14 @@ class Peserta extends CI_CONTROLLER{
         public function edit_data_peserta_reguler(){
             $data = $this->Akademik_model->edit_data_peserta_reguler();
             
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle mr-1 text-success"></i>Berhasil mengubah data peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengubah data peserta');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
         public function edit_data_peserta_privat(){
             $data = $this->Akademik_model->edit_data_peserta_privat();
             
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle mr-1 text-success"></i>Berhasil mengubah data peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil mengubah data peserta');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
@@ -114,16 +132,16 @@ class Peserta extends CI_CONTROLLER{
             // edit_data($table, $where, $data)
             $this->Main_model->edit_data("peserta", ["id_peserta" => $id_peserta], $data);
 
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil memindahkan peserta ke waiting list<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $this->session->set_flashdata('pesan', 'Berhasil memindahkan peserta ke waiting list');
             redirect($_SERVER['HTTP_REFERER']);
         }
 
         public function edit_status_peserta($id, $status){
             $this->Main_model->edit_data("peserta", ["id_peserta" => $id], ["status" => $status]);
             if($status == "aktif"){
-                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil mengaktifkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->set_flashdata('pesan', 'Berhasil mengaktifkan peserta');
             } else if($status == "nonaktif"){
-                $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle text-success mr-1"></i>Berhasil menonaktifkan peserta<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $this->session->set_flashdata('pesan', 'Berhasil menonaktifkan peserta');
             }
             redirect($_SERVER['HTTP_REFERER']);
         }
