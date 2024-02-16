@@ -12,6 +12,7 @@ class Home_Model extends CI_MODEL{
             DROP TEMPORARY TABLE IF EXISTS temp_tahun_kbm;
             DROP TEMPORARY TABLE IF EXISTS temp_kelas;
             DROP TEMPORARY TABLE IF EXISTS temp_peserta_reguler;
+            DROP TEMPORARY TABLE IF EXISTS rekap_full;
             
             CREATE TEMPORARY TABLE temp_tahun_kbm (
                 bulan INT,
