@@ -314,6 +314,7 @@ class Kelas extends CI_CONTROLLER{
 
         public function nonaktif_peserta(){
             $id_peserta = $this->input->post("id_peserta", TRUE);
+
             if($id_peserta){
                 foreach ($id_peserta as $id_peserta) {
                     $this->Akademik_model->nonaktif_peserta($id_peserta);
@@ -324,22 +325,38 @@ class Kelas extends CI_CONTROLLER{
                     if($peserta['tipe_peserta'] == "reguler"){
                         // tampilkan kelas
                         $kelas = $this->Main_model->get_one("kelas", ["id_kelas" => $peserta['id_kelas']]);
-                        // tampilkan jadwal
-                        $jadwal = $this->Main_model->get_one("jadwal", ["id_kelas" => $kelas['id_kelas'], "status" => "aktif"]);
-                        // tampilkan kpq
-                        $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
-                        $data = [
-                            "id_peserta" => $id_peserta,
-                            "nama_kpq" => $kpq['nama_kpq'],
-                            "hari" => $jadwal['hari'],
-                            "jam" => $jadwal['jam'],
-                            "tipe" => $kelas['tipe_kelas'],
-                            "program" => $kelas['program'],
-                            "nama_peserta" => $peserta['nama_peserta'],
-                            "tempat" => $jadwal['tempat'],
-                            "status" => "nonaktif",
-                            "tgl_history" => $this->input->post("tgl_history", TRUE)
-                        ];
+
+                        if($kelas){
+                            // tampilkan jadwal
+                            $jadwal = $this->Main_model->get_one("jadwal", ["id_kelas" => $kelas['id_kelas'], "status" => "aktif"]);
+                            // tampilkan kpq
+                            $kpq = $this->Main_model->get_one("kpq", ["nip" => $kelas['nip']]);
+                            $data = [
+                                "id_peserta" => $id_peserta,
+                                "nama_kpq" => $kpq['nama_kpq'],
+                                "hari" => $jadwal['hari'],
+                                "jam" => $jadwal['jam'],
+                                "tipe" => $kelas['tipe_kelas'],
+                                "program" => $kelas['program'],
+                                "nama_peserta" => $peserta['nama_peserta'],
+                                "tempat" => $jadwal['tempat'],
+                                "status" => "nonaktif",
+                                "tgl_history" => $this->input->post("tgl_history", TRUE)
+                            ];
+                        } else {
+                            $data = [
+                                "id_peserta" => $id_peserta,
+                                "nama_kpq" => '',
+                                "hari" => '',
+                                "jam" => '',
+                                "tipe" => '',
+                                "program" => '',
+                                "nama_peserta" => $peserta['nama_peserta'],
+                                "tempat" => '',
+                                "status" => "nonaktif",
+                                "tgl_history" => date('Y-m-d')
+                            ];
+                        }
     
                         $this->Main_model->add_data("history_peserta", $data);
                     }
