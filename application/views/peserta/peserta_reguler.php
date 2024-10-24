@@ -67,6 +67,14 @@
                         </div>
                         <div class="form-detail menu-navigation" id="menu-data-peserta">
                             <div class="form-group">
+                                <label for="status">status</label>
+                                <select name="status" id="status" class="form-control form-control-md">
+                                    <option value="">Pilih status</option>
+                                    <option value="aktif">aktif</option>
+                                    <option value="nonaktif">nonaktif</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="nama">Nama Lengkap</label>
                                 <input class='form-control form-control-md' type="text" name="nama" id="nama">
                             </div>
